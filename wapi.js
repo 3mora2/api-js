@@ -1,1 +1,1450 @@
-(()=>{var e={276:function(e,t,n){"use strict";var r;!function(i){function o(e,t,n){var r,i,o,a,s,w,v,P,y,g=0,m=[],A=0,b=!1,W=[],I=[],S=!1,M=!1,C=-1;if(r=(n=n||{}).encoding||"UTF8",(y=n.numRounds||1)!==parseInt(y,10)||1>y)throw Error("numRounds must a integer >= 1");if("SHA-1"===e)s=512,w=H,v=z,a=160,P=function(e){return e.slice()};else if(0===e.lastIndexOf("SHA-",0))if(w=function(t,n){return B(t,n,e)},v=function(t,n,r,i){var o,a;if("SHA-224"===e||"SHA-256"===e)o=15+(n+65>>>9<<4),a=16;else{if("SHA-384"!==e&&"SHA-512"!==e)throw Error("Unexpected error in SHA-2 implementation");o=31+(n+129>>>10<<5),a=32}for(;t.length<=o;)t.push(0);for(t[n>>>5]|=128<<24-n%32,n+=r,t[o]=4294967295&n,t[o-1]=n/4294967296|0,r=t.length,n=0;n<r;n+=a)i=B(t.slice(n,n+a),i,e);if("SHA-224"===e)t=[i[0],i[1],i[2],i[3],i[4],i[5],i[6]];else if("SHA-256"===e)t=i;else if("SHA-384"===e)t=[i[0].a,i[0].b,i[1].a,i[1].b,i[2].a,i[2].b,i[3].a,i[3].b,i[4].a,i[4].b,i[5].a,i[5].b];else{if("SHA-512"!==e)throw Error("Unexpected error in SHA-2 implementation");t=[i[0].a,i[0].b,i[1].a,i[1].b,i[2].a,i[2].b,i[3].a,i[3].b,i[4].a,i[4].b,i[5].a,i[5].b,i[6].a,i[6].b,i[7].a,i[7].b]}return t},P=function(e){return e.slice()},"SHA-224"===e)s=512,a=224;else if("SHA-256"===e)s=512,a=256;else if("SHA-384"===e)s=1024,a=384;else{if("SHA-512"!==e)throw Error("Chosen SHA variant is not supported");s=1024,a=512}else{if(0!==e.lastIndexOf("SHA3-",0)&&0!==e.lastIndexOf("SHAKE",0))throw Error("Chosen SHA variant is not supported");var O=6;if(w=D,P=function(e){var t,n=[];for(t=0;5>t;t+=1)n[t]=e[t].slice();return n},C=1,"SHA3-224"===e)s=1152,a=224;else if("SHA3-256"===e)s=1088,a=256;else if("SHA3-384"===e)s=832,a=384;else if("SHA3-512"===e)s=576,a=512;else if("SHAKE128"===e)s=1344,a=-1,O=31,M=!0;else{if("SHAKE256"!==e)throw Error("Chosen SHA variant is not supported");s=1088,a=-1,O=31,M=!0}v=function(e,t,n,r,i){var o,a=O,u=[],c=(n=s)>>>5,l=0,d=t>>>5;for(o=0;o<d&&t>=n;o+=c)r=D(e.slice(o,o+c),r),t-=n;for(e=e.slice(o),t%=n;e.length<c;)e.push(0);for(e[(o=t>>>3)>>2]^=a<<o%4*8,e[c-1]^=2147483648,r=D(e,r);32*u.length<i&&(e=r[l%5][l/5|0],u.push(e.b),!(32*u.length>=i));)u.push(e.a),0==64*(l+=1)%n&&D(null,r);return u}}o=h(t,r,C),i=F(e),this.setHMACKey=function(t,n,o){var u;if(!0===b)throw Error("HMAC key already set");if(!0===S)throw Error("Cannot set HMAC key after calling update");if(!0===M)throw Error("SHAKE is not supported for HMAC");if(t=(n=h(n,r=(o||{}).encoding||"UTF8",C)(t)).binLen,n=n.value,o=(u=s>>>3)/4-1,u<t/8){for(n=v(n,t,0,F(e),a);n.length<=o;)n.push(0);n[o]&=4294967040}else if(u>t/8){for(;n.length<=o;)n.push(0);n[o]&=4294967040}for(t=0;t<=o;t+=1)W[t]=909522486^n[t],I[t]=1549556828^n[t];i=w(W,i),g=s,b=!0},this.update=function(e){var t,n,r,a=0,u=s>>>5;for(e=(t=o(e,m,A)).binLen,n=t.value,t=e>>>5,r=0;r<t;r+=u)a+s<=e&&(i=w(n.slice(r,r+u),i),a+=s);g+=a,m=n.slice(a>>>5),A=e%s,S=!0},this.getHash=function(t,n){var r,o,s,h;if(!0===b)throw Error("Cannot call getHash after setting HMAC key");if(s=p(n),!0===M){if(-1===s.shakeLen)throw Error("shakeLen must be specified in options");a=s.shakeLen}switch(t){case"HEX":r=function(e){return u(e,a,C,s)};break;case"B64":r=function(e){return c(e,a,C,s)};break;case"BYTES":r=function(e){return l(e,a,C)};break;case"ARRAYBUFFER":try{o=new ArrayBuffer(0)}catch(e){throw Error("ARRAYBUFFER not supported by this environment")}r=function(e){return d(e,a,C)};break;case"UINT8ARRAY":try{o=new Uint8Array(0)}catch(e){throw Error("UINT8ARRAY not supported by this environment")}r=function(e){return f(e,a,C)};break;default:throw Error("format must be HEX, B64, BYTES, ARRAYBUFFER, or UINT8ARRAY")}for(h=v(m.slice(),A,g,P(i),a),o=1;o<y;o+=1)!0===M&&0!=a%32&&(h[h.length-1]&=16777215>>>24-a%32),h=v(h,a,0,F(e),a);return r(h)},this.getHMAC=function(t,n){var r,o,h,y;if(!1===b)throw Error("Cannot call getHMAC without first setting HMAC key");switch(h=p(n),t){case"HEX":r=function(e){return u(e,a,C,h)};break;case"B64":r=function(e){return c(e,a,C,h)};break;case"BYTES":r=function(e){return l(e,a,C)};break;case"ARRAYBUFFER":try{r=new ArrayBuffer(0)}catch(e){throw Error("ARRAYBUFFER not supported by this environment")}r=function(e){return d(e,a,C)};break;case"UINT8ARRAY":try{r=new Uint8Array(0)}catch(e){throw Error("UINT8ARRAY not supported by this environment")}r=function(e){return f(e,a,C)};break;default:throw Error("outputFormat must be HEX, B64, BYTES, ARRAYBUFFER, or UINT8ARRAY")}return o=v(m.slice(),A,g,P(i),a),y=w(I,F(e)),r(y=v(o,a,s,y,a))}}function a(e,t){this.a=e,this.b=t}function s(e,t,n,r){var i,o,a,s,u;for(t=t||[0],o=(n=n||0)>>>3,u=-1===r?3:0,i=0;i<e.length;i+=1)a=(s=i+o)>>>2,t.length<=a&&t.push(0),t[a]|=e[i]<<8*(u+s%4*r);return{value:t,binLen:8*e.length+n}}function u(e,t,n,r){var i,o,a,s="";for(t/=8,a=-1===n?3:0,i=0;i<t;i+=1)o=e[i>>>2]>>>8*(a+i%4*n),s+="0123456789abcdef".charAt(o>>>4&15)+"0123456789abcdef".charAt(15&o);return r.outputUpper?s.toUpperCase():s}function c(e,t,n,r){var i,o,a,s,u="",c=t/8;for(s=-1===n?3:0,i=0;i<c;i+=3)for(o=i+1<c?e[i+1>>>2]:0,a=i+2<c?e[i+2>>>2]:0,a=(e[i>>>2]>>>8*(s+i%4*n)&255)<<16|(o>>>8*(s+(i+1)%4*n)&255)<<8|a>>>8*(s+(i+2)%4*n)&255,o=0;4>o;o+=1)u+=8*i+6*o<=t?"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(a>>>6*(3-o)&63):r.b64Pad;return u}function l(e,t,n){var r,i,o,a="";for(t/=8,o=-1===n?3:0,r=0;r<t;r+=1)i=e[r>>>2]>>>8*(o+r%4*n)&255,a+=String.fromCharCode(i);return a}function d(e,t,n){t/=8;var r,i,o,a=new ArrayBuffer(t);for(o=new Uint8Array(a),i=-1===n?3:0,r=0;r<t;r+=1)o[r]=e[r>>>2]>>>8*(i+r%4*n)&255;return a}function f(e,t,n){t/=8;var r,i,o=new Uint8Array(t);for(i=-1===n?3:0,r=0;r<t;r+=1)o[r]=e[r>>>2]>>>8*(i+r%4*n)&255;return o}function p(e){var t={outputUpper:!1,b64Pad:"=",shakeLen:-1};if(e=e||{},t.outputUpper=e.outputUpper||!1,!0===e.hasOwnProperty("b64Pad")&&(t.b64Pad=e.b64Pad),!0===e.hasOwnProperty("shakeLen")){if(0!=e.shakeLen%8)throw Error("shakeLen must be a multiple of 8");t.shakeLen=e.shakeLen}if("boolean"!=typeof t.outputUpper)throw Error("Invalid outputUpper formatting option");if("string"!=typeof t.b64Pad)throw Error("Invalid b64Pad formatting option");return t}function h(e,t,n){switch(t){case"UTF8":case"UTF16BE":case"UTF16LE":break;default:throw Error("encoding must be UTF8, UTF16BE, or UTF16LE")}switch(e){case"HEX":e=function(e,t,r){var i,o,a,s,u,c,l=e.length;if(0!=l%2)throw Error("String of HEX type must be in byte increments");for(t=t||[0],u=(r=r||0)>>>3,c=-1===n?3:0,i=0;i<l;i+=2){if(o=parseInt(e.substr(i,2),16),isNaN(o))throw Error("String of HEX type contains invalid characters");for(a=(s=(i>>>1)+u)>>>2;t.length<=a;)t.push(0);t[a]|=o<<8*(c+s%4*n)}return{value:t,binLen:4*l+r}};break;case"TEXT":e=function(e,r,i){var o,a,s,u,c,l,d,f,p=0;if(r=r||[0],c=(i=i||0)>>>3,"UTF8"===t)for(f=-1===n?3:0,s=0;s<e.length;s+=1)for(a=[],128>(o=e.charCodeAt(s))?a.push(o):2048>o?(a.push(192|o>>>6),a.push(128|63&o)):55296>o||57344<=o?a.push(224|o>>>12,128|o>>>6&63,128|63&o):(s+=1,o=65536+((1023&o)<<10|1023&e.charCodeAt(s)),a.push(240|o>>>18,128|o>>>12&63,128|o>>>6&63,128|63&o)),u=0;u<a.length;u+=1){for(l=(d=p+c)>>>2;r.length<=l;)r.push(0);r[l]|=a[u]<<8*(f+d%4*n),p+=1}else if("UTF16BE"===t||"UTF16LE"===t)for(f=-1===n?2:0,a="UTF16LE"===t&&1!==n||"UTF16LE"!==t&&1===n,s=0;s<e.length;s+=1){for(o=e.charCodeAt(s),!0===a&&(o=(u=255&o)<<8|o>>>8),l=(d=p+c)>>>2;r.length<=l;)r.push(0);r[l]|=o<<8*(f+d%4*n),p+=2}return{value:r,binLen:8*p+i}};break;case"B64":e=function(e,t,r){var i,o,a,s,u,c,l,d,f=0;if(-1===e.search(/^[a-zA-Z0-9=+\/]+$/))throw Error("Invalid character in base-64 string");if(o=e.indexOf("="),e=e.replace(/\=/g,""),-1!==o&&o<e.length)throw Error("Invalid '=' found in base-64 string");for(t=t||[0],c=(r=r||0)>>>3,d=-1===n?3:0,o=0;o<e.length;o+=4){for(u=e.substr(o,4),a=s=0;a<u.length;a+=1)s|=(i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(u.charAt(a)))<<18-6*a;for(a=0;a<u.length-1;a+=1){for(i=(l=f+c)>>>2;t.length<=i;)t.push(0);t[i]|=(s>>>16-8*a&255)<<8*(d+l%4*n),f+=1}}return{value:t,binLen:8*f+r}};break;case"BYTES":e=function(e,t,r){var i,o,a,s,u,c;for(t=t||[0],a=(r=r||0)>>>3,c=-1===n?3:0,o=0;o<e.length;o+=1)i=e.charCodeAt(o),s=(u=o+a)>>>2,t.length<=s&&t.push(0),t[s]|=i<<8*(c+u%4*n);return{value:t,binLen:8*e.length+r}};break;case"ARRAYBUFFER":try{e=new ArrayBuffer(0)}catch(e){throw Error("ARRAYBUFFER not supported by this environment")}e=function(e,t,r){return s(new Uint8Array(e),t,r,n)};break;case"UINT8ARRAY":try{e=new Uint8Array(0)}catch(e){throw Error("UINT8ARRAY not supported by this environment")}e=function(e,t,r){return s(e,t,r,n)};break;default:throw Error("format must be HEX, TEXT, B64, BYTES, ARRAYBUFFER, or UINT8ARRAY")}return e}function w(e,t){return e<<t|e>>>32-t}function v(e,t){return 32<t?(t-=32,new a(e.b<<t|e.a>>>32-t,e.a<<t|e.b>>>32-t)):0!==t?new a(e.a<<t|e.b>>>32-t,e.b<<t|e.a>>>32-t):e}function P(e,t){return e>>>t|e<<32-t}function y(e,t){var n;return n=new a(e.a,e.b),32>=t?new a(n.a>>>t|n.b<<32-t&4294967295,n.b>>>t|n.a<<32-t&4294967295):new a(n.b>>>t-32|n.a<<64-t&4294967295,n.a>>>t-32|n.b<<64-t&4294967295)}function g(e,t){return 32>=t?new a(e.a>>>t,e.b>>>t|e.a<<32-t&4294967295):new a(0,e.a>>>t-32)}function m(e,t,n){return e&t^~e&n}function A(e,t,n){return new a(e.a&t.a^~e.a&n.a,e.b&t.b^~e.b&n.b)}function b(e,t,n){return e&t^e&n^t&n}function W(e,t,n){return new a(e.a&t.a^e.a&n.a^t.a&n.a,e.b&t.b^e.b&n.b^t.b&n.b)}function I(e){return P(e,2)^P(e,13)^P(e,22)}function S(e){var t=y(e,28),n=y(e,34);return e=y(e,39),new a(t.a^n.a^e.a,t.b^n.b^e.b)}function M(e){return P(e,6)^P(e,11)^P(e,25)}function C(e){var t=y(e,14),n=y(e,18);return e=y(e,41),new a(t.a^n.a^e.a,t.b^n.b^e.b)}function O(e){return P(e,7)^P(e,18)^e>>>3}function E(e){var t=y(e,1),n=y(e,8);return e=g(e,7),new a(t.a^n.a^e.a,t.b^n.b^e.b)}function _(e){return P(e,17)^P(e,19)^e>>>10}function j(e){var t=y(e,19),n=y(e,61);return e=g(e,6),new a(t.a^n.a^e.a,t.b^n.b^e.b)}function x(e,t){var n=(65535&e)+(65535&t);return((e>>>16)+(t>>>16)+(n>>>16)&65535)<<16|65535&n}function k(e,t,n,r){var i=(65535&e)+(65535&t)+(65535&n)+(65535&r);return((e>>>16)+(t>>>16)+(n>>>16)+(r>>>16)+(i>>>16)&65535)<<16|65535&i}function T(e,t,n,r,i){var o=(65535&e)+(65535&t)+(65535&n)+(65535&r)+(65535&i);return((e>>>16)+(t>>>16)+(n>>>16)+(r>>>16)+(i>>>16)+(o>>>16)&65535)<<16|65535&o}function U(e,t){var n,r,i;return n=(65535&e.b)+(65535&t.b),i=(65535&(r=(e.b>>>16)+(t.b>>>16)+(n>>>16)))<<16|65535&n,n=(65535&e.a)+(65535&t.a)+(r>>>16),new a((65535&(r=(e.a>>>16)+(t.a>>>16)+(n>>>16)))<<16|65535&n,i)}function L(e,t,n,r){var i,o,s;return i=(65535&e.b)+(65535&t.b)+(65535&n.b)+(65535&r.b),s=(65535&(o=(e.b>>>16)+(t.b>>>16)+(n.b>>>16)+(r.b>>>16)+(i>>>16)))<<16|65535&i,i=(65535&e.a)+(65535&t.a)+(65535&n.a)+(65535&r.a)+(o>>>16),new a((65535&(o=(e.a>>>16)+(t.a>>>16)+(n.a>>>16)+(r.a>>>16)+(i>>>16)))<<16|65535&i,s)}function N(e,t,n,r,i){var o,s,u;return o=(65535&e.b)+(65535&t.b)+(65535&n.b)+(65535&r.b)+(65535&i.b),u=(65535&(s=(e.b>>>16)+(t.b>>>16)+(n.b>>>16)+(r.b>>>16)+(i.b>>>16)+(o>>>16)))<<16|65535&o,o=(65535&e.a)+(65535&t.a)+(65535&n.a)+(65535&r.a)+(65535&i.a)+(s>>>16),new a((65535&(s=(e.a>>>16)+(t.a>>>16)+(n.a>>>16)+(r.a>>>16)+(i.a>>>16)+(o>>>16)))<<16|65535&o,u)}function R(e,t){return new a(e.a^t.a,e.b^t.b)}function F(e){var t,n=[];if("SHA-1"===e)n=[1732584193,4023233417,2562383102,271733878,3285377520];else if(0===e.lastIndexOf("SHA-",0))switch(n=[3238371032,914150663,812702999,4144912697,4290775857,1750603025,1694076839,3204075428],t=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225],e){case"SHA-224":break;case"SHA-256":n=t;break;case"SHA-384":n=[new a(3418070365,n[0]),new a(1654270250,n[1]),new a(2438529370,n[2]),new a(355462360,n[3]),new a(1731405415,n[4]),new a(41048885895,n[5]),new a(3675008525,n[6]),new a(1203062813,n[7])];break;case"SHA-512":n=[new a(t[0],4089235720),new a(t[1],2227873595),new a(t[2],4271175723),new a(t[3],1595750129),new a(t[4],2917565137),new a(t[5],725511199),new a(t[6],4215389547),new a(t[7],327033209)];break;default:throw Error("Unknown SHA variant")}else{if(0!==e.lastIndexOf("SHA3-",0)&&0!==e.lastIndexOf("SHAKE",0))throw Error("No SHA variants supported");for(e=0;5>e;e+=1)n[e]=[new a(0,0),new a(0,0),new a(0,0),new a(0,0),new a(0,0)]}return n}function H(e,t){var n,r,i,o,a,s,u,c=[];for(n=t[0],r=t[1],i=t[2],o=t[3],a=t[4],u=0;80>u;u+=1)c[u]=16>u?e[u]:w(c[u-3]^c[u-8]^c[u-14]^c[u-16],1),s=20>u?T(w(n,5),r&i^~r&o,a,1518500249,c[u]):40>u?T(w(n,5),r^i^o,a,1859775393,c[u]):60>u?T(w(n,5),b(r,i,o),a,2400959708,c[u]):T(w(n,5),r^i^o,a,3395469782,c[u]),a=o,o=i,i=w(r,30),r=n,n=s;return t[0]=x(n,t[0]),t[1]=x(r,t[1]),t[2]=x(i,t[2]),t[3]=x(o,t[3]),t[4]=x(a,t[4]),t}function z(e,t,n,r){var i;for(i=15+(t+65>>>9<<4);e.length<=i;)e.push(0);for(e[t>>>5]|=128<<24-t%32,t+=n,e[i]=4294967295&t,e[i-1]=t/4294967296|0,t=e.length,i=0;i<t;i+=16)r=H(e.slice(i,i+16),r);return r}function B(e,t,n){var r,i,o,s,u,c,l,d,f,p,h,w,v,P,y,g,R,F,H,z,B,D,q,V=[];if("SHA-224"===n||"SHA-256"===n)p=64,w=1,D=Number,v=x,P=k,y=T,g=O,R=_,F=I,H=M,B=b,z=m,q=G;else{if("SHA-384"!==n&&"SHA-512"!==n)throw Error("Unexpected error in SHA-2 implementation");p=80,w=2,D=a,v=U,P=L,y=N,g=E,R=j,F=S,H=C,B=W,z=A,q=Y}for(n=t[0],r=t[1],i=t[2],o=t[3],s=t[4],u=t[5],c=t[6],l=t[7],h=0;h<p;h+=1)16>h?(f=h*w,d=e.length<=f?0:e[f],f=e.length<=f+1?0:e[f+1],V[h]=new D(d,f)):V[h]=P(R(V[h-2]),V[h-7],g(V[h-15]),V[h-16]),d=y(l,H(s),z(s,u,c),q[h],V[h]),f=v(F(n),B(n,r,i)),l=c,c=u,u=s,s=v(o,d),o=i,i=r,r=n,n=v(d,f);return t[0]=v(n,t[0]),t[1]=v(r,t[1]),t[2]=v(i,t[2]),t[3]=v(o,t[3]),t[4]=v(s,t[4]),t[5]=v(u,t[5]),t[6]=v(c,t[6]),t[7]=v(l,t[7]),t}function D(e,t){var n,r,i,o,s=[],u=[];if(null!==e)for(r=0;r<e.length;r+=2)t[(r>>>1)%5][(r>>>1)/5|0]=R(t[(r>>>1)%5][(r>>>1)/5|0],new a(e[r+1],e[r]));for(n=0;24>n;n+=1){for(o=F("SHA3-"),r=0;5>r;r+=1){i=t[r][0];var c=t[r][1],l=t[r][2],d=t[r][3],f=t[r][4];s[r]=new a(i.a^c.a^l.a^d.a^f.a,i.b^c.b^l.b^d.b^f.b)}for(r=0;5>r;r+=1)u[r]=R(s[(r+4)%5],v(s[(r+1)%5],1));for(r=0;5>r;r+=1)for(i=0;5>i;i+=1)t[r][i]=R(t[r][i],u[r]);for(r=0;5>r;r+=1)for(i=0;5>i;i+=1)o[i][(2*r+3*i)%5]=v(t[r][i],q[r][i]);for(r=0;5>r;r+=1)for(i=0;5>i;i+=1)t[r][i]=R(o[r][i],new a(~o[(r+1)%5][i].a&o[(r+2)%5][i].a,~o[(r+1)%5][i].b&o[(r+2)%5][i].b));t[0][0]=R(t[0][0],V[n])}return t}var G,Y,q,V;Y=[new a((G=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298])[0],3609767458),new a(G[1],602891725),new a(G[2],3964484399),new a(G[3],2173295548),new a(G[4],4081628472),new a(G[5],3053834265),new a(G[6],2937671579),new a(G[7],3664609560),new a(G[8],2734883394),new a(G[9],1164996542),new a(G[10],1323610764),new a(G[11],3590304994),new a(G[12],4068182383),new a(G[13],991336113),new a(G[14],633803317),new a(G[15],3479774868),new a(G[16],2666613458),new a(G[17],944711139),new a(G[18],2341262773),new a(G[19],2007800933),new a(G[20],1495990901),new a(G[21],1856431235),new a(G[22],3175218132),new a(G[23],2198950837),new a(G[24],3999719339),new a(G[25],766784016),new a(G[26],2566594879),new a(G[27],3203337956),new a(G[28],1034457026),new a(G[29],2466948901),new a(G[30],3758326383),new a(G[31],168717936),new a(G[32],1188179964),new a(G[33],1546045734),new a(G[34],1522805485),new a(G[35],2643833823),new a(G[36],2343527390),new a(G[37],1014477480),new a(G[38],1206759142),new a(G[39],344077627),new a(G[40],1290863460),new a(G[41],3158454273),new a(G[42],3505952657),new a(G[43],106217008),new a(G[44],3606008344),new a(G[45],1432725776),new a(G[46],1467031594),new a(G[47],851169720),new a(G[48],3100823752),new a(G[49],1363258195),new a(G[50],3750685593),new a(G[51],3785050280),new a(G[52],3318307427),new a(G[53],3812723403),new a(G[54],2003034995),new a(G[55],3602036899),new a(G[56],1575990012),new a(G[57],1125592928),new a(G[58],2716904306),new a(G[59],442776044),new a(G[60],593698344),new a(G[61],3733110249),new a(G[62],2999351573),new a(G[63],3815920427),new a(3391569614,3928383900),new a(3515267271,566280711),new a(3940187606,3454069534),new a(4118630271,4000239992),new a(116418474,1914138554),new a(174292421,2731055270),new a(289380356,3203993006),new a(460393269,320620315),new a(685471733,587496836),new a(852142971,1086792851),new a(1017036298,365543100),new a(1126000580,2618297676),new a(1288033470,3409855158),new a(1501505948,4234509866),new a(1607167915,987167468),new a(1816402316,1246189591)],V=[new a(0,1),new a(0,32898),new a(2147483648,32906),new a(2147483648,2147516416),new a(0,32907),new a(0,2147483649),new a(2147483648,2147516545),new a(2147483648,32777),new a(0,138),new a(0,136),new a(0,2147516425),new a(0,2147483658),new a(0,2147516555),new a(2147483648,139),new a(2147483648,32905),new a(2147483648,32771),new a(2147483648,32770),new a(2147483648,128),new a(0,32778),new a(2147483648,2147483658),new a(2147483648,2147516545),new a(2147483648,32896),new a(0,2147483649),new a(2147483648,2147516424)],q=[[0,36,3,41,18],[1,44,10,45,2],[62,6,43,15,61],[28,55,25,21,56],[27,20,39,8,14]],void 0===(r=function(){return o}.call(t,n,t,e))||(e.exports=r)}()},976:(e,t,n)=>{"use strict";function r(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function i(e){return function(){var t=this,n=arguments;return new Promise((function(i,o){var a=e.apply(t,n);function s(e){r(a,i,o,s,u,"next",e)}function u(e){r(a,i,o,s,u,"throw",e)}s(void 0)}))}}function o(){return(o=i((function*(e){return yield new Promise(((t,n)=>{var r=new XMLHttpRequest;r.onload=function(){if(4==r.readyState)if(200==r.status){var e=new FileReader;e.readAsDataURL(r.response),e.onload=function(n){t(e.result.substr(e.result.indexOf(",")+1))}}else console.error(r.statusText);else t(!1)},r.open("GET",e,!0),r.responseType="blob",r.send(null)}))}))).apply(this,arguments)}function a(e,t){var n=e.split(","),r=n[0].match(/(?:data:)?(.*?)(?:;base64)?$/i)[1];r=r.split(/\s+;\s+/).join("; ");for(var i=window.Base64?window.Base64.atob(n[1]):atob(n[1]),o=i.length,a=new Uint8Array(o);o--;)a[o]=i.charCodeAt(o);return new File([a],t,{type:r})}var s=n(276);function u(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function c(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){u(o,r,i,a,s,"next",e)}function s(e){u(o,r,i,a,s,"throw",e)}a(void 0)}))}}function l(e){return d.apply(this,arguments)}function d(){return(d=c((function*(e){var t=yield e.arrayBuffer(),n=new s("SHA-256","ARRAYBUFFER");return n.update(t),n.getHash("B64")}))).apply(this,arguments)}function f(e){for(var t="",n="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",r=0;r<e;r++)t+=n.charAt(Math.floor(Math.random()*n.length));return t}function p(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,r)}return n}function h(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?p(Object(n),!0).forEach((function(t){w(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):p(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}function w(e,t,n){return(t=function(e){var t=function(e,t){if("object"!=typeof e||null===e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var r=n.call(e,"string");if("object"!=typeof r)return r;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(e);return"symbol"==typeof t?t:String(t)}(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function v(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function P(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){v(o,r,i,a,s,"next",e)}function s(e){v(o,r,i,a,s,"throw",e)}a(void 0)}))}}function y(){return(y=P((function*(e,t){var n=yield l(t),r=f(32),i=(new AbortController).signal,o=yield window.Store.UploadUtils.encryptAndUpload({blob:t,type:e,signal:i,mediaKey:r});return h(h({},o),{},{clientUrl:o.url,filehash:n,id:n,uploadhash:o.encFilehash,mediaBlob:t})}))).apply(this,arguments)}function g(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function m(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){g(o,r,i,a,s,"next",e)}function s(e){g(o,r,i,a,s,"throw",e)}a(void 0)}))}}function A(){return(A=m((function*(e){var t=[];e?t.push(WAPI.getAllChatsWithNewMsg().map((e=>WAPI.getChat(e.id._serialized)))):t.push(WAPI.getAllChatIds().map((e=>WAPI.getChat(e))));var n=(yield Promise.all(t)).flatMap((e=>e)),r=JSON.stringify(n);return JSON.parse(r)}))).apply(this,arguments)}function b(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function W(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){b(o,r,i,a,s,"next",e)}function s(e){b(o,r,i,a,s,"throw",e)}a(void 0)}))}}var I=function(){var e=W((function*(){var e=yield Promise.all(WPP.whatsapp.ContactStore.map(function(){var e=W((function*(e){return yield WAPI._serializeContactObj(e)}));return function(t){return e.apply(this,arguments)}}()));return e}));return function(){return e.apply(this,arguments)}}();function S(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function M(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){S(o,r,i,a,s,"next",e)}function s(e){S(o,r,i,a,s,"throw",e)}a(void 0)}))}}function C(){return(C=M((function*(e,t,n,r){var i=yield WAPI.sendExist(e),o=[];if(!i.erro){var a=i.msgs.getModelsArray();for(var s in a)if("remove"!==s){var u=a[s],c=WAPI.processMessageObj(u,t,n);c&&o.push(c)}}return void 0!==r&&r(o),o}))).apply(this,arguments)}var O=function(e){return e.unreadCount>0},E=function(e){var t=WPP.whatsapp.ChatStore.filter(O).map((e=>WAPI._serializeChatObj(e)));return void 0!==e&&e(t),t};function _(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}var j=function(){var e,t=(e=function*(){var e=E().map((e=>WPP.chat.getMessages(e.id,{count:e.unreadCount})));return(yield Promise.all(e)).flat().map(WAPI._serializeMessageObj)},function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){_(o,r,i,a,s,"next",e)}function s(e){_(o,r,i,a,s,"throw",e)}a(void 0)}))});return function(){return t.apply(this,arguments)}}();function x(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function k(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){x(o,r,i,a,s,"next",e)}function s(e){x(o,r,i,a,s,"throw",e)}a(void 0)}))}}function T(){return(T=k((function*(e,t){var n=yield WAPI.getChat(e);return n=!!n&&WAPI._serializeChatObj(n),void 0!==t&&t(n),n}))).apply(this,arguments)}function U(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function L(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){U(o,r,i,a,s,"next",e)}function s(e){U(o,r,i,a,s,"throw",e)}a(void 0)}))}}function N(){return(N=L((function*(e,t){var n=[],r=window.WAPI.getAllGroups();for(var i in r)try{(yield window.WAPI.getGroupParticipantIDs(r[i].id)).filter((t=>t==e)).length&&n.push(r[i])}catch(e){console.log("Error in group:"),console.log(r[i]),console.log(e)}return void 0!==t&&t(n),n}))).apply(this,arguments)}function R(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function F(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){R(o,r,i,a,s,"next",e)}function s(e){R(o,r,i,a,s,"throw",e)}a(void 0)}))}}function H(){return(H=F((function*(e,t){var n=WPP.whatsapp.GroupMetadataStore.find(e);return void 0!==t&&t(n),n}))).apply(this,arguments)}function z(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function B(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){z(o,r,i,a,s,"next",e)}function s(e){z(o,r,i,a,s,"throw",e)}a(void 0)}))}}function D(){return(D=B((function*(e,t){var n=yield Promise.resolve(WPP.group.getParticipants()).then((e=>e.map((e=>e.id))));return void 0!==t&&t(n),n}))).apply(this,arguments)}function G(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Y(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){G(o,r,i,a,s,"next",e)}function s(e){G(o,r,i,a,s,"throw",e)}a(void 0)}))}}function q(){return(q=Y((function*(e){return(yield WAPI.getGroupMetadata(e)).participants}))).apply(this,arguments)}function V(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function J(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){V(o,r,i,a,s,"next",e)}function s(e){V(o,r,i,a,s,"throw",e)}a(void 0)}))}}function K(){return(K=J((function*(e,t){var n=yield WPP.contact.queryExists(e);if(!n||void 0===n.wid)throw 404;var r=window.WAPI._serializeNumberStatusObj({jid:n.wid,status:200,isBusiness:n.biz});return 200==r.status&&(r.numberExists=!0),void 0!==t&&(t(window.WAPI._serializeNumberStatusObj(n)),t(r)),r}))).apply(this,arguments)}function Q(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function X(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Q(o,r,i,a,s,"next",e)}function s(e){Q(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Z(e,t){return $.apply(this,arguments)}function $(){return($=X((function*(e,t){var n=WAPI.getChat(e);if(!n)return t&&t(!1),!1;try{yield WPP.whatsapp.MsgStore.findQuery({remote:n.id,count:-1})}catch(e){}for(;!n.msgs.msgLoadState.noEarlierMsgs;)yield n.loadEarlierMsgs();return t&&t(!0),!0}))).apply(this,arguments)}function ee(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function te(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){ee(o,r,i,a,s,"next",e)}function s(e){ee(o,r,i,a,s,"throw",e)}a(void 0)}))}}function ne(){return(ne=te((function*(e,t,n,r){return WAPI.loadAllEarlierMessages(e).then((i=>{var o=WAPI.getChat(e);if(!o)throw{error:!0,code:"chat_not_found",message:"Chat not found"};var a=[],s=o.msgs.getModelsArray();for(var u in s)if("remove"!==u){var c=s[u],l=WAPI.processMessageObj(c,t,n);l&&a.push(l)}return void 0!==r&&r(a),a}))}))).apply(this,arguments)}function re(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function ie(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){re(o,r,i,a,s,"next",e)}function s(e){re(o,r,i,a,s,"throw",e)}a(void 0)}))}}function oe(){return(oe=ie((function*(e){var t=WAPI.getChat(e);if(t){var n=yield t.loadEarlierMsgs();if(n)return n.map(WAPI._serializeMessageObj)}return!1}))).apply(this,arguments)}function ae(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function se(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){ae(o,r,i,a,s,"next",e)}function s(e){ae(o,r,i,a,s,"throw",e)}a(void 0)}))}}function ue(e,t){return ce.apply(this,arguments)}function ce(){return(ce=se((function*(e,t){Array.isArray(t)||(t=[t]);var n=new Store.MediaCollection({chatParticipantCount:e.getParticipantCount()});return yield n.processAttachments("0.4.613"===Debug.VERSION?t:t.map((e=>({file:e}))),e,1),n}))).apply(this,arguments)}function le(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function de(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){le(o,r,i,a,s,"next",e)}function s(e){le(o,r,i,a,s,"throw",e)}a(void 0)}))}}function fe(){return(fe=de((function*(e,t){e=parseInt(e,10);var n=WPP.whatsapp.ChatStore.get(t);if(!n)throw{error:!0,code:"chat_not_found",message:"Chat not found"};switch(e){case 0:window.Store.ChatStates.sendChatStateComposing(n.id);break;case 1:window.Store.ChatStates.sendChatStateRecording(n.id);break;case 2:window.Store.ChatStates.sendChatStatePaused(n.id);break;default:return!1}return!0}))).apply(this,arguments)}function pe(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function he(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){pe(o,r,i,a,s,"next",e)}function s(e){pe(o,r,i,a,s,"throw",e)}a(void 0)}))}}function we(e,t){return ve.apply(this,arguments)}function ve(){return ve=he((function*(e,t){var n=!(arguments.length>2&&void 0!==arguments[2])||arguments[2];if("object"==typeof e&&e._serialized&&(e=e._serialized),"string"!=typeof e)return!1;var r=yield WPP.chat.getMessageById(e);if(!r)return!1;var i=!1;if(n)try{i=WAPI.processMessageObj(r,!0,!0)}catch(e){}else i=r;if("function"!=typeof t)return i;t(i)})),ve.apply(this,arguments)}function Pe(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function ye(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Pe(o,r,i,a,s,"next",e)}function s(e){Pe(o,r,i,a,s,"throw",e)}a(void 0)}))}}function ge(e,t,n,r,i){return me.apply(this,arguments)}function me(){return me=ye((function*(e,t,n,r,i){var o=arguments.length>5&&void 0!==arguments[5]?arguments[5]:null,s=arguments.length>6&&void 0!==arguments[6]&&arguments[6];if(i=i||"sendFile","string"!=typeof n&&null!=n||"string"!=typeof r&&null!=r){var u="incorrect parameter, insert an string.";return WAPI.scope(t,!0,null,u)}var c=e.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);c&&c.length&&(c=c[1]);var l=yield WAPI.sendExist(t);if(l.erro)return l;var d=null;if("string"==typeof o&&o){var f=yield we(o,null,!1);f&&f.canReply()&&(d=f)}var p=a(e,n),h=yield ue(l,p),w=h.getModelsArray()[0],v=(yield w.sendToChat(l,{caption:r,quotedMsg:d,isViewOnce:s}))||"",P={type:i,filename:n,text:r,mimeType:c},y=yield WAPI.getchatId(l.id);if("success"===v||"OK"===v){var g=WAPI.scope(y,!1,v,null);return Object.assign(g,P),g}return g=WAPI.scope(y,!0,v,null),Object.assign(g,P),g})),me.apply(this,arguments)}function Ae(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function be(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Ae(o,r,i,a,s,"next",e)}function s(e){Ae(o,r,i,a,s,"throw",e)}a(void 0)}))}}function We(){return We=be((function*(e,t,n,r,i){var o=arguments.length>5&&void 0!==arguments[5]?arguments[5]:null,s=yield WAPI.sendExist(t);if(s.erro)return s;var u=null;if("string"==typeof o&&o){var c=yield we(o,null,!1);c&&c.canReply()&&(u=c)}var l=a(e,n),d=yield ue(s,l),f=d.getModelsArray()[0];f.mediaPrep._mediaData.type="ptt";var p=(yield f.sendToChat(s,{caption:r,quotedMsg:u}))||"";void 0!==i&&i(!0);var h={type:"ptt",filename:n,text:r},w=yield WAPI.getchatId(s.id);if("success"===p||"OK"===p){var v=WAPI.scope(w,!1,p,null);return Object.assign(v,h),v}return v=WAPI.scope(w,!0,p,null),Object.assign(v,h),v})),We.apply(this,arguments)}function Ie(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}function Se(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Me(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Se(o,r,i,a,s,"next",e)}function s(e){Se(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Ce(){return Ce=Me((function*(e,t,n){var r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null,i=yield WAPI.sendExist(e);if(i.erro)return i;var o,a=WPP.chat.generateMessageID(i.id),s={ack:0,id:a,local:!0,self:"out",t:parseInt((new Date).getTime()/1e3),from:WPP.whatsapp.UserPrefs.getMaybeMeUser(),to:i.id,isNewMsg:!0,type:"location",lat:t,lng:n,loc:r},u=(yield Promise.all(WPP.whatsapp.functions.addAndSendMsgToChat(i,s)))[1]||"",c={latitude:t,longitude:n,title:r,type:"location"},l=yield WAPI.getchatId(i.id);return"success"==u||"OK"==u?(o=WAPI.scope(l,!1,u,null),Object.assign(o,c),o):(o=WAPI.scope(l,!0,u,null),Object.assign(o,c),o)})),Ce.apply(this,arguments)}function Oe(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Ee(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Oe(o,r,i,a,s,"next",e)}function s(e){Oe(o,r,i,a,s,"throw",e)}a(void 0)}))}}function _e(){return(_e=Ee((function*(e,t){var n=yield WAPI.sendExist(e);if(n.erro)return n;var r=WPP.chat.generateMessageID(n.id),i={id:r,body:t,type:"chat",subtype:null,t:parseInt((new Date).getTime()/1e3),from:WPP.whatsapp.UserPrefs.getMaybeMeUser(),to:n.id,self:"out",isNewMsg:!0,local:!0,ack:0,urlText:null,urlNumber:null},o=(yield Promise.all(WPP.whatsapp.functions.addAndSendMsgToChat(n,i)))[1]||"";if("success"===o||"OK"===o)return null==r?void 0:r._serialized;var a={type:"sendtext",text:i},s=yield WAPI.getchatId(n.id),u=WAPI.scope(s,!0,o,null);return Object.assign(u,a),u}))).apply(this,arguments)}function je(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,r)}return n}function xe(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?je(Object(n),!0).forEach((function(t){ke(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):je(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}function ke(e,t,n){return(t=function(e){var t=function(e,t){if("object"!=typeof e||null===e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var r=n.call(e,"string");if("object"!=typeof r)return r;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(e);return"symbol"==typeof t?t:String(t)}(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function Te(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Ue(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Te(o,r,i,a,s,"next",e)}function s(e){Te(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Le(){return Le=Ue((function*(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},r=WPP.chat.get(e)||(yield WPP.chat.find(e)),i={};n.attachment&&(t=(i=yield WWebJS.processMediaData(n.attachment,n.sendAudioAsVoice)).preview,delete n.attachment);var o={};if(n.quotedMessageId){var a=yield we(n.quotedMessageId,null,!1);a&&a.canReply()&&(o=a.msgContextInfo(r)),delete n.quotedMessageId}n.mentionedJidList&&(n.mentionedJidList=n.mentionedJidList.map((e=>WPP.whatsapp.ContactStore.get(e).id)));var s={};n.location&&(s={type:"location",loc:n.location.description,lat:n.location.latitude,lng:n.location.longitude},delete n.location);var u={};if(n.contactCard){var c=WPP.whatsapp.ContactStore.get(n.contactCard);u={body:WPP.whatsapp.VCard.vcardFromContactModel(c).vcard,type:"vcard",vcardFormattedName:c.formattedName},delete n.contactCard}else if(n.contactCardList){var l=n.contactCardList.map((e=>WPP.whatsapp.ContactStore.get(e))),d=l.map((e=>WPP.whatsapp.VCard.vcardFromContactModel(e)));u={type:"multi_vcard",vcardList:d,body:void 0},delete n.contactCardList}else if(n.parseVCards&&"string"==typeof t&&t.startsWith("BEGIN:VCARD")){delete n.parseVCards;try{var f=yield WPP.whatsapp.VCard.parseVcard(t);f&&(u={type:"vcard",vcardFormattedName:yield WPP.whatsapp.VCard.vcardGetNameFromParsed(f)})}catch(e){}}if(n.linkPreview){delete n.linkPreview;var p=yield window.Store.Validators.findLink(t);if(p&&!WPP.conn.isMultiDevice()){var h=yield WPP.whatsapp.functions.queryLinkPreview(p.url);h.preview=!0,h.subtype="url",n=xe(xe({},n),h)}}var w=WPP.chat.generateMessageID(r.id),v=WPP.whatsapp.UserPrefs.getMaybeMeUser(),P=xe(xe(xe(xe(xe({id:w,ack:0,body:t,from:v,to:r.id,local:!0,self:"out",t:parseInt((new Date).getTime()/1e3),isNewMsg:!0,type:"chat"},n),s),i),o),u);return yield WPP.whatsapp.functions.addAndSendMsgToChat(r,P),w._serialized})),Le.apply(this,arguments)}function Ne(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Re(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Ne(o,r,i,a,s,"next",e)}function s(e){Ne(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Fe(){return(Fe=Re((function*(e,t){var n=e.id?e:WPP.whatsapp.ChatStore.get(e),r=n.id._serialized,i=n.msgs.filter((e=>e.__x_isSentByMe))[0];if(!i)return n.sendMessage(t);var o=Object.create(i),a=WPP.chat.generateMessageID(r),s=t.match(/@(\d*)/g).map((e=>new WPP.whatsapp.WidFactory.createUserWid(e.replace("@",""))))||void 0,u={ack:0,id:a,local:!0,self:"out",t:parseInt((new Date).getTime()/1e3),to:new WPP.whatsapp.WidFactory.createWid(r),isNewMsg:!0,type:"chat",body:t,quotedMsg:null,mentionedJidList:s};return Object.assign(o,u),yield WPP.whatsapp.functions.addAndSendMsgToChat(n,o),a._serialized}))).apply(this,arguments)}function He(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function ze(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){He(o,r,i,a,s,"next",e)}function s(e){He(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Be(){return(Be=ze((function*(e,t,n,r,i){var o=yield WAPI.sendExist(t);if(o.erro)return o;var s=a(e,n),u=(yield ue(o,s)).getModelsArray()[0];u.mediaPrep._mediaData.isGif=!0,u.mediaPrep._mediaData.gifAttribution=1;var c=(yield u.sendToChat(o,{caption:r}))||"",l={filename:n,text:r},d=yield WAPI.getchatId(o.id);if("success"===c||"OK"===c){void 0!==i&&i(!1);var f=WAPI.scope(d,!1,c,null);return Object.assign(f,l),f}return void 0!==i&&i(!0),f=WAPI.scope(d,!0,c,null),Object.assign(f,l),f}))).apply(this,arguments)}function De(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Ge(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){De(o,r,i,a,s,"next",e)}function s(e){De(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Ye(){return(Ye=Ge((function*(e){yield window.Store.Perfil.setPushname(e)}))).apply(this,arguments)}function qe(e,t){var n="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!n){if(Array.isArray(e)||(n=function(e,t){if(e){if("string"==typeof e)return Ve(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?Ve(e,t):void 0}}(e))||t&&e&&"number"==typeof e.length){n&&(e=n);var r=0,i=function(){};return{s:i,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:i}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,s=!1;return{s:function(){n=n.call(e)},n:function(){var e=n.next();return a=e.done,e},e:function(e){s=!0,o=e},f:function(){try{a||null==n.return||n.return()}finally{if(s)throw o}}}}function Ve(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}function Je(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Ke(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Je(o,r,i,a,s,"next",e)}function s(e){Je(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Qe(){return(Qe=Ke((function*(e,t,n){Array.isArray(t)||(t=[t]),yield WAPI.sendExist(e);var r=WPP.whatsapp.ChatStore.get(e);if(!r)throw{error:!0,code:"chat_not_found",message:"Chat not found",chatId:e};var i,o=[],a=qe(t);try{for(a.s();!(i=a.n()).done;){var s=i.value,u="string"==typeof s?s:s.id,c=yield we(u,null,!1);if(!c)throw{error:!0,code:"message_not_found",message:"Message not Found",messageId:u};o.push(c)}}catch(e){a.e(e)}finally{a.f()}var l=o.filter((e=>!n||!e.isSentByMe));return yield r.forwardMessages(l),yield new Promise((e=>setTimeout(e,100))),r.msgs.getModelsArray().slice(-1*t.length).map((e=>e.id._serialized))}))).apply(this,arguments)}function Xe(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Ze(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Xe(o,r,i,a,s,"next",e)}function s(e){Xe(o,r,i,a,s,"throw",e)}a(void 0)}))}}function $e(){return $e=Ze((function*(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=yield WPP.chat.getMessages(e,t);if(!Array.isArray(n)){var r=new Error("Failed to fetch messages for ".concat(e));throw Object.assign(r,n),r}var i=n.map((e=>new WPP.whatsapp.MsgStore.modelClass(e))).map((e=>WAPI.processMessageObj(e,!0,!0)));return i})),$e.apply(this,arguments)}function et(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function tt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){et(o,r,i,a,s,"next",e)}function s(e){et(o,r,i,a,s,"throw",e)}a(void 0)}))}}function nt(){return(nt=tt((function*(e){return"dark"==e||"light"==e?(yield Store.Theme.setTheme(e),!0):console.error("Use type dark or light")}))).apply(this,arguments)}function rt(){return(rt=tt((function*(){return yield Store.Theme.getTheme()}))).apply(this,arguments)}function it(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function ot(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){it(o,r,i,a,s,"next",e)}function s(e){it(o,r,i,a,s,"throw",e)}a(void 0)}))}}function at(){return(at=ot((function*(e,t,n){n=n||"";var r={Protocol:"^(https?:\\/\\/)?",Domain:"((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|",IP:"((\\d{1,3}\\.){3}\\d{1,3}))",Port:"(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*",Query:"(\\?[;&a-z\\d%_.~+=-]*)?",End:"(\\#[-a-z\\d_]*)?$",Reg:()=>new RegExp(r.Protocol+r.Domain+r.IP+r.Port+r.Query+r.End,"i")};if(!r.Reg().test(t))return n="Use a valid HTTP protocol. Example: https://www.youtube.com/watch?v=V1bFr2SWP1",WAPI.scope(e,!0,null,n);var i=yield WAPI.sendExist(e);if(i.erro)return i;var o=WPP.conn.isMultiDevice()?void 0:yield WPP.whatsapp.functions.queryLinkPreview(t),a=(yield i.sendMessage(n.includes(t)?n:"".concat(t,"\n").concat(n),{linkPreview:o}))||"",s={type:"LinkPreview",url:t,text:n},u=yield WAPI.getchatId(i.id);if("success"===a||"OK"===a){var c=WAPI.scope(u,!1,a,null);return Object.assign(c,s),c}return c=WAPI.scope(u,!0,a,null),Object.assign(c,s),c}))).apply(this,arguments)}function st(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function ut(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){st(o,r,i,a,s,"next",e)}function s(e){st(o,r,i,a,s,"throw",e)}a(void 0)}))}}function ct(e,t,n){var r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null,i={me:WPP.whatsapp.Conn.attributes,to:e,erro:t,text:r,status:n};return i}function lt(){return(lt=ut((function*(e){var t=yield WAPI.getChatById(e),n=t.lastReceivedKey||{},r={formattedName:t.contact.formattedName,isBusiness:t.contact.isBusiness,isMyContact:t.contact.isMyContact,verifiedName:t.contact.verifiedName,pushname:t.contact.pushname};return Object.assign(n,r),n}))).apply(this,arguments)}function dt(){return dt=ut((function*(e){var t=!(arguments.length>1&&void 0!==arguments[1])||arguments[1],n=!(arguments.length>2&&void 0!==arguments[2])||arguments[2];if(!e)return ct(e,!0,500,"Chat ID is empty");var r=yield window.WAPI.getChat(e);if(r||"status@broadcast"!==e||(r=new WPP.whatsapp.ChatStore.modelClass({id:WPP.whatsapp.WidFactory.createWid("status@broadcast")}),WPP.whatsapp.ChatStore.add(r),r=yield window.WAPI.getChat(e)),!r&&!e.includes("@g")){var i=yield window.WAPI.checkNumberStatus(e);if(!i.numberExists)return ct(e,!0,i.status,"The number does not exist");yield WPP.chat.find(i.id),e=i.id._serialized,r=yield window.WAPI.getChat(e)}return r?(n&&(yield WPP.chat.markIsRead(r.id).catch((()=>null))),t?r:ct(e,!1,200)):ct(e,!0,404)})),dt.apply(this,arguments)}function ft(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function pt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){ft(o,r,i,a,s,"next",e)}function s(e){ft(o,r,i,a,s,"throw",e)}a(void 0)}))}}function ht(){return(ht=pt((function*(e,t){t||(t=WPP.whatsapp.UserPrefs.getMaybeMeUser());var n=WPP.whatsapp.WidFactory.createWid(t),r="data:image/jpeg;base64,";return yield WPP.whatsapp.functions.sendSetPicture(n,r+e.b,r+e.a)}))).apply(this,arguments)}function wt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function vt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){wt(o,r,i,a,s,"next",e)}function s(e){wt(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Pt(){return Pt=vt((function*(e){var t=!(arguments.length>1&&void 0!==arguments[1])||arguments[1],n=arguments.length>2&&void 0!==arguments[2]&&arguments[2];if("boolean"!=typeof t||"boolean"!=typeof n){var r="incorrect parameter, insert a boolean true or false";return WAPI.scope(e,!0,null,r)}var i=t?"pin":"unpin",o=void 0,a=yield WAPI.sendExist(e,!0,n);if(a.erro)return a;var s={type:"pinChat",typefix:i},u=yield WAPI.getchatId(a.id);return yield Store.pinChat.setPin(a,t).then((e=>{var t=WAPI.scope(u,!1,"OK",null);Object.assign(t,s),o=t})).catch((e=>{var t=WAPI.scope(u,!0,e,"Pin Chat first");Object.assign(t,s),o=t})),o})),Pt.apply(this,arguments)}function yt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function gt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){yt(o,r,i,a,s,"next",e)}function s(e){yt(o,r,i,a,s,"throw",e)}a(void 0)}))}}function mt(){return(mt=gt((function*(){if(window.localStorage){var e=yield JSON.parse(JSON.stringify(window.localStorage));return{WABrowserId:e.WABrowserId,WASecretBundle:e.WASecretBundle,WAToken1:e.WAToken1,WAToken2:e.WAToken2}}}))).apply(this,arguments)}function At(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function bt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){At(o,r,i,a,s,"next",e)}function s(e){At(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Wt(){return(Wt=bt((function*(e,t,n){var r=yield WAPI.sendExist(e);if(r.erro)return r;var i,o=null,a=null,s=null,u=yield WAPI.getchatId(r.id),c=yield window.Store.Mute.get(r.id),l={type:"sendMute",time:t,timeType:n};if("number"==typeof t&&"string"==typeof n){switch(n){case"hours":o=parseInt(new Date((new Date).setHours((new Date).getHours()+t)).getTime()/1e3);break;case"minutes":o=parseInt(new Date((new Date).setMinutes((new Date).getMinutes()+t)).getTime()/1e3);break;case"year":o=parseInt(new Date((new Date).setDate((new Date).getDate()+t)).getTime()/1e3)}yield window.Store.SendMute.sendConversationMute(r.id,o,0).then((e=>{a=e})).catch((e=>{a=e}))}else s=!0,yield window.Store.SendMute.sendConversationMute(r.id,0,c.__x_expiration).then((e=>{a=e})).catch((e=>{a=e}));if(200===a.status){s?(c.__x_expiration=0,c.__x_isMuted=!1):(c.__x_expiration=o,c.__x_isMuted=!0);var d=WAPI.scope(u,!1,a.status,null);return Object.assign(d,l),d}return i=s?"is not mute to remove":"This chat is already mute",d=WAPI.scope(u,!0,a.status,i),Object.assign(d,l),d}))).apply(this,arguments)}function It(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function St(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){It(o,r,i,a,s,"next",e)}function s(e){It(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Mt(){return Mt=St((function*(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"all",t=(yield window.Store.Mute)._models,n=new Array,r=new Array;for(var i in t)t[i].__x_isMuted?r.push(WAPI.interfaceMute(t[i])):n.push(WAPI.interfaceMute(t[i]));var o=null;switch(console.log(0,e),e){case"all":o=[{total:r.length+n.length,amountToMute:r.length,amountnoMute:n.length},r,n];break;case"toMute":o=[{total:r.length},r];break;case"noMute":o=[{total:n.length},n]}return o})),Mt.apply(this,arguments)}function Ct(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Ot(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Ct(o,r,i,a,s,"next",e)}function s(e){Ct(o,r,i,a,s,"throw",e)}a(void 0)}))}}var Et=null,_t=!0;function jt(){return xt.apply(this,arguments)}function xt(){return(xt=Ot((function*(){if("MAIN"===WPP.whatsapp.Stream.mode&&"TIMEOUT"!==WPP.whatsapp.Socket.state)return _t?(_t=!1,WPP.whatsapp.Socket.sendBasic({tag:WPP.whatsapp.Socket.tag("ping"),data:["admin","test"]}).then((()=>{_t=!0}))):(WPP.whatsapp.Socket.phoneWatchdog.activate(),void WPP.whatsapp.Socket.phoneWatchdog.poke(250))}))).apply(this,arguments)}function kt(){Et&&clearInterval(Et),Et=null}function Tt(e,t){var n="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!n){if(Array.isArray(e)||(n=function(e,t){if(e){if("string"==typeof e)return Ut(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?Ut(e,t):void 0}}(e))||t&&e&&"number"==typeof e.length){n&&(e=n);var r=0,i=function(){};return{s:i,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:i}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,s=!1;return{s:function(){n=n.call(e)},n:function(){var e=n.next();return a=e.done,e},e:function(e){s=!0,o=e},f:function(){try{a||null==n.return||n.return()}finally{if(s)throw o}}}}function Ut(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}function Lt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Nt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Lt(o,r,i,a,s,"next",e)}function s(e){Lt(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Rt(){return(Rt=Nt((function*(e){Array.isArray(e)||(e=[e]);var t,n=0,r=Tt(e);try{for(r.s();!(t=r.n()).done;){var i=t.value,o=new WPP.whatsapp.WidFactory.createWid(i);Store.Presence.get(o)||(yield Store.Presence.find(o),n++)}}catch(e){r.e(e)}finally{r.f()}return n}))).apply(this,arguments)}function Ft(){return(Ft=Nt((function*(e){Array.isArray(e)||(e=[e]);var t,n=0,r=Tt(e);try{for(r.s();!(t=r.n()).done;){var i=t.value,o=new WPP.whatsapp.WidFactory.createWid(i),a=Store.Presence.get(o);a&&(a.delete(),n++)}}catch(e){r.e(e)}finally{r.f()}return n}))).apply(this,arguments)}function Ht(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function zt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Ht(o,r,i,a,s,"next",e)}function s(e){Ht(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Bt(){return(Bt=zt((function*(e){void 0===e&&(e=!0),e?yield WPP.whatsapp.ChatPresence.sendPresenceAvailable():yield WPP.whatsapp.ChatPresence.sendPresenceUnavailable()}))).apply(this,arguments)}function Dt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Gt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Dt(o,r,i,a,s,"next",e)}function s(e){Dt(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Yt(){return(Yt=Gt((function*(e,t){var n=WPP.whatsapp.ChatStore.get(e);if(!n)throw{error:!0,code:"chat_not_found",message:"Chat not found"};return n.isGroup?yield WPP.group.setProperty(n.id,"ephemeral",t):(t=t?604800:0,yield Store.changeEphemeralDuration(n,t).catch((e=>{throw{error:!0,code:e.code||e.status||e.statusCode||"unknown",message:e.message||e.reason||"Unknown Error"}})),!0)}))).apply(this,arguments)}function qt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Vt(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){qt(o,r,i,a,s,"next",e)}function s(e){qt(o,r,i,a,s,"throw",e)}a(void 0)}))}}function Jt(){return Jt=Vt((function*(e,t){void 0===t&&(t=!0),Array.isArray(e)||(e=[e]);var n=yield Promise.all(e.map(function(){var e=Vt((function*(e){return yield we(e,null,!1)}));return function(t){return e.apply(this,arguments)}}())),r=(n=n.filter((e=>e&&e.star!==t))).reduce((function(e,t){var n=t.id.remote._serialized;return e[n]=e[n]||[],e[n].push(t),e}),Object.create(null)),i=0,o=function*(){var e=WPP.whatsapp.ChatStore.get(a),n=r[a];i+=(yield e.sendStarMsgs(n,t).then((()=>n.length)).catch((()=>0)))};for(var a in r)yield*o();return i})),Jt.apply(this,arguments)}function Kt(){var e=!(arguments.length>0&&void 0!==arguments[0])||arguments[0],t=arguments.length>1?arguments[1]:void 0;return window.WAPI._newMessagesCallbacks.push({callback:t,rmAfterUse:e}),!0}function Qt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function Xt(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}var Zt={};function $t(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}var en=function(){var e,t=(e=function*(e){var t=WPP.whatsapp.WidFactory.createDeviceWid(e),n=WPP.whatsapp.ProfilePicThumbStore.get(t);return n||(n=yield WPP.whatsapp.ProfilePicThumbStore.find(t)),n?WAPI._serializeProfilePicThumb(n):null},function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){$t(o,r,i,a,s,"next",e)}function s(e){$t(o,r,i,a,s,"throw",e)}a(void 0)}))});return function(e){return t.apply(this,arguments)}}();function tn(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function nn(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){tn(o,r,i,a,s,"next",e)}function s(e){tn(o,r,i,a,s,"throw",e)}a(void 0)}))}}function rn(){return(rn=nn((function*(e){var t=WPP.whatsapp.CatalogStore.get(e);if(t||(t=yield WPP.whatsapp.CatalogStore.find(WPP.whatsapp.WidFactory.createWid(e))),!t)throw{error:!0,code:"catalog_not_found",message:"Catalog not found"};return t.productCollection?t.productCollection.serialize():[]}))).apply(this,arguments)}function on(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function an(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){on(o,r,i,a,s,"next",e)}function s(e){on(o,r,i,a,s,"throw",e)}a(void 0)}))}}function sn(){return(sn=an((function*(e){var t=yield we(e,null,!1);if(!t)throw{error:!0,code:"message_not_found",message:"Message not found"};if("order"!==t.type)throw{error:!0,code:"message_is_not_an_order",message:"Message is not an order"};var n=WPP.whatsapp.OrderStore.get(t.orderId);if(n||(n=yield WPP.whatsapp.OrderStore.findOrder(t.orderId,t.sellerJid,t.token)),!n)throw{error:!0,code:"order_not_found",message:"Order not found"};return n.products}))).apply(this,arguments)}var un=[{id:"Store",conditions:e=>e.default&&e.default.Chat&&e.default.Msg?e.default:null},{id:"MediaCollection",conditions:e=>e.default&&e.default.prototype&&void 0!==e.default.prototype.processAttachments?e.default:null},{id:"GroupInvite",conditions:e=>e.sendQueryGroupInviteCode?e:null},{id:"Archive",conditions:e=>e.setArchive?e:null},{id:"pinChat",conditions:e=>e.setPin.toString().includes(".unproxy")?e:null},{id:"Perfil",conditions:e=>!0===e.__esModule&&e.setPushname&&!e.getComposeContents?e:null},{id:"ChatStates",conditions:e=>e.sendChatStatePaused&&e.sendChatStateRecording&&e.sendChatStateComposing?e:null},{id:"MediaObject",conditions:e=>e.getOrCreateMediaObject&&e.disassociateMediaFromStickerPack?e:null},{id:"UploadUtils",conditions:e=>e.default&&e.default.encryptAndUpload?e.default:null},{id:"Theme",conditions:e=>e.getTheme&&e.setTheme?e:null},{id:"SendMute",conditions:e=>e.sendConversationMute?e:null},{id:"Validators",conditions:e=>e.findLinks?e:null},{id:"changeEphemeralDuration",conditions:e=>e.changeEphemeralDuration},{id:"sendCreateGroup",conditions:e=>e.sendCreateGroup},{id:"sendQueryGroupInvite",conditions:e=>e.sendQueryGroupInvite?e.sendQueryGroupInvite:null}];function cn(e,t,n,r,i,o,a){try{var s=e[o](a),u=s.value}catch(e){return void n(e)}s.done?t(u):Promise.resolve(u).then(r,i)}function ln(e){return function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){cn(o,r,i,a,s,"next",e)}function s(e){cn(o,r,i,a,s,"throw",e)}a(void 0)}))}}function dn(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}var fn=new Promise((e=>{WPP.isReady?e():WPP.webpack.onReady(e)}));void 0===window.Store&&(window.Store={},window.Store.promises={},fn.then((()=>{var e,t=function(e,t){var n="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!n){if(Array.isArray(e)||(n=function(e,t){if(e){if("string"==typeof e)return dn(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?dn(e,t):void 0}}(e))||t&&e&&"number"==typeof e.length){n&&(e=n);var r=0,i=function(){};return{s:i,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:i}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,s=!1;return{s:function(){n=n.call(e)},n:function(){var e=n.next();return a=e.done,e},e:function(e){s=!0,o=e},f:function(){try{a||null==n.return||n.return()}finally{if(s)throw o}}}}(un);try{var n=function(){var t=e.value;window.Store.promises[t.id]=Promise.resolve(WPP.webpack.search(t.conditions)).then((e=>(e||console.error("Store Object '".concat(t.id,"' was not found")),e))).then(t.conditions).then((e=>{"Store"===t.id?window.Store=Object.assign({},window.Store,e):window.Store[t.id]=e}))};for(t.s();!(e=t.n()).done;)n()}catch(e){t.e(e)}finally{t.f()}}))),void 0===window.WAPI&&(window.WAPI={lastRead:{}},window.WAPI.interfaceMute=function(e){return{attributes:e.attributes,expiration:e.expiration,id:e.id,isMuted:e.isMuted,isState:e.isState,promises:e.promises,stale:e.stale}},window.WAPI.setProfilePic=function(e,t){return ht.apply(this,arguments)},window.WAPI.getSessionTokenBrowser=function(){return mt.apply(this,arguments)},window.WAPI.scope=ct,window.WAPI.getchatId=function(e){return lt.apply(this,arguments)},window.WAPI.sendExist=function(e){return dt.apply(this,arguments)},window.WAPI.pinChat=function(e){return Pt.apply(this,arguments)},window.WAPI.setTemporaryMessages=function(e,t){return Yt.apply(this,arguments)},window.WAPI.setTheme=function(e){return nt.apply(this,arguments)},window.WAPI.getTheme=function(){return rt.apply(this,arguments)},window.WAPI._serializeRawObj=e=>e&&e.toJSON?e.toJSON():{},window.WAPI._serializeChatObj=e=>null==e?null:Object.assign(window.WAPI._serializeRawObj(e),{kind:e.kind,isBroadcast:e.isBroadcast,isGroup:e.isGroup,isUser:e.isUser,contact:e.contact?window.WAPI._serializeContactObj(e.contact):null,groupMetadata:e.groupMetadata?window.WAPI._serializeRawObj(e.groupMetadata):null,presence:e.presence?window.WAPI._serializeRawObj(e.presence):null,msgs:null}),window.WAPI._serializeContactObj=e=>{if(null==e)return null;var t=null;if(!e.profilePicThumb&&e.id&&WPP.whatsapp.ProfilePicThumbStore){var n=WPP.whatsapp.ProfilePicThumbStore.get(e.id);t=n?WAPI._serializeProfilePicThumb(n):{}}return Object.assign(window.WAPI._serializeRawObj(e),{formattedName:e.formattedName,isHighLevelVerified:e.isHighLevelVerified,isMe:e.isMe,isMyContact:e.isMyContact,isPSA:e.isPSA,isUser:e.isUser,isVerified:e.isVerified,isWAContact:e.isWAContact,profilePicThumbObj:t,statusMute:e.statusMute,msgs:null})},window.WAPI._serializeMessageObj=e=>{var t,n,r,i,o,a,s,u;return null==e?null:(e.quotedMsg&&e.quotedMsgObj&&e.quotedMsgObj(),Object.assign(window.WAPI._serializeRawObj(e),{id:e.id._serialized,from:e.from._serialized,quotedParticipant:null==e||null===(t=e.quotedParticipant)||void 0===t?void 0:t._serialized,author:null==e||null===(n=e.author)||void 0===n?void 0:n._serialized,chatId:(null==e||null===(r=e.id)||void 0===r?void 0:r.remote)||(null==e||null===(i=e.chatId)||void 0===i?void 0:i._serialized),to:null==e||null===(o=e.to)||void 0===o?void 0:o._serialized,fromMe:null==e||null===(a=e.id)||void 0===a?void 0:a.fromMe,sender:e.senderObj?WAPI._serializeContactObj(e.senderObj):null,timestamp:e.t,content:e.body,isGroupMsg:e.isGroupMsg,isLink:e.isLink,isMMS:e.isMMS,isMedia:e.isMedia,isNotification:e.isNotification,isPSA:e.isPSA,type:e.type,quotedMsgId:null==e||null===(s=e._quotedMsgObj)||void 0===s||null===(u=s.id)||void 0===u?void 0:u._serialized,mediaData:window.WAPI._serializeRawObj(e.mediaData)}))},window.WAPI._serializeNumberStatusObj=e=>null==e?null:Object.assign({},{id:e.jid,status:e.status,isBusiness:!0===e.biz,canReceiveMessage:200===e.status}),window.WAPI._serializeProfilePicThumb=e=>null==e?null:Object.assign({},{eurl:e.eurl,id:e.id,img:e.img,imgFull:e.imgFull,raw:e.raw,tag:e.tag}),window.WAPI._profilePicfunc=en,window.WAPI.sendChatstate=function(e,t){return fe.apply(this,arguments)},window.WAPI.sendMessageWithThumb=function(e,t,n,r,i,o){var a=WAPI.getChat(i);if(void 0===a)return void 0!==o&&o(!1),!1;var s={canonicalUrl:t,description:r,matchedText:t,title:n,thumbnail:e};return a.sendMessage(t,{linkPreview:s,mentionedJidList:[],quotedMsg:null,quotedMsgAdminGroupJid:null}),void 0!==o&&o(!0),!0},window.WAPI.processMessageObj=function(e,t,n){return e.isNotification?n?WAPI._serializeMessageObj(e):void 0:!1===e.id.fromMe||t?WAPI._serializeMessageObj(e):void 0},window.WAPI.sendMessageWithTags=function(e,t){return Fe.apply(this,arguments)},window.WAPI.sendMessage=function(e,t){return _e.apply(this,arguments)},window.WAPI.sendMessage2=function(e,t,n){var r=WAPI.getChat(e);if(void 0!==r)try{return void 0!==n?r.sendMessage(t).then((function(){n(!0)})):r.sendMessage(t),!0}catch(e){return void 0!==n&&n(!1),!1}return void 0!==n&&n(!1),!1},window.WAPI.sendImage=function(e,t,n,r,i,o){return ge(e,t,n,r,"sendImage",i,o)},window.WAPI.sendPtt=function(e,t,n,r,i){return We.apply(this,arguments)},window.WAPI.sendFile=ge,window.WAPI.setMyName=function(e){return Ye.apply(this,arguments)},window.WAPI.sendVideoAsGif=function(e,t,n,r,i){return Be.apply(this,arguments)},window.WAPI.processFiles=ue,window.WAPI.sendImageWithProduct=function(e,t,n,r,i,o){WPP.whatsapp.CatalogStore.findCarouselCatalog(r).then((r=>{if(r&&r[0]){var s=r[0].productCollection.get(i),u={productMsgOptions:{businessOwnerJid:s.catalogWid.toString({legacy:!0}),productId:s.id.toString(),url:s.url,productImageCount:s.productImageCollection.length,title:s.name,description:s.description,currencyCode:s.currency,priceAmount1000:s.priceAmount1000,type:"product"},caption:n},c=new WPP.whatsapp.WidFactory.createWid(t);return WPP.chat.find(c).then((t=>{var n=a(e,s.name);ue(t,n).then((e=>{var n=e.getModelsArray()[0];Object.entries(u.productMsgOptions).map((e=>{var t,r,i=(r=2,function(e){if(Array.isArray(e))return e}(t=e)||function(e,t){var n=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null!=n){var r,i,o,a,s=[],u=!0,c=!1;try{if(o=(n=n.call(e)).next,0===t){if(Object(n)!==n)return;u=!1}else for(;!(u=(r=o.call(n)).done)&&(s.push(r.value),s.length!==t);u=!0);}catch(e){c=!0,i=e}finally{try{if(!u&&null!=n.return&&(a=n.return(),Object(a)!==a))return}finally{if(c)throw i}}return s}}(t,r)||function(e,t){if(e){if("string"==typeof e)return Ie(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?Ie(e,t):void 0}}(t,r)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()),o=i[0],a=i[1];return n.mediaPrep._mediaData[o]=a})),n.mediaPrep.sendToChat(t,u),void 0!==o&&o(!0)}))}))}}))},window.WAPI.createProduct=function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null,r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null,i=arguments.length>4&&void 0!==arguments[4]&&arguments[4],o=arguments.length>5&&void 0!==arguments[5]?arguments[5]:null,a=arguments.length>6&&void 0!==arguments[6]?arguments[6]:null,s=arguments.length>7&&void 0!==arguments[7]?arguments[7]:"BRL",u=arguments.length>8?arguments[8]:void 0;WPP.catalog.createProduct({name:t,image:e,description:n,price:r,isHidden:i,url:o,retailerId:a,currency:s}).then((e=>{void 0!==u&&u(e)}))},window.WAPI.forwardMessages=function(e,t,n){return Qe.apply(this,arguments)},window.WAPI.encryptAndUploadFile=function(e,t){return y.apply(this,arguments)},window.WAPI.setOnlinePresence=function(e){return Bt.apply(this,arguments)},window.WAPI.sendLocation=function(e,t,n){return Ce.apply(this,arguments)},window.WAPI.sendLinkPreview=function(e,t,n){return at.apply(this,arguments)},window.WAPI.sendMessageOptions=function(e,t){return Le.apply(this,arguments)},window.WAPI.starMessages=function(e,t){return Jt.apply(this,arguments)},window.WAPI.getAllContacts=I,window.WAPI.getMyContacts=function(e){var t=WPP.whatsapp.ContactStore.filter((e=>!0===e.isMyContact)).map((e=>WAPI._serializeContactObj(e)));return void 0!==e&&e(t),t},window.WAPI.getContact=function(e,t){var n=WPP.whatsapp.ContactStore.get(e);return void 0!==t&&t(window.WAPI._serializeContactObj(n)),window.WAPI._serializeContactObj(n)},window.WAPI.getAllChats=function(e){var t=WPP.whatsapp.ChatStore.map((e=>WAPI._serializeChatObj(e)));return void 0!==e&&e(t),t},window.WAPI.haveNewMsg=O,window.WAPI.getAllChatsWithNewMsg=E,window.WAPI.getAllChatIds=function(e){var t=WPP.whatsapp.ChatStore.map((e=>e.id._serialized||e.id));return void 0!==e&&e(t),t},window.WAPI.getAllNewMessages=function(){return E().map((e=>WAPI.getChat(e.id))).flatMap((e=>e.msgs.filter((e=>e.isNewMsg)))).map(WAPI._serializeMessageObj)||[]},window.WAPI.getAllUnreadMessages=j,window.WAPI.getAllChatsWithMessages=function(e){return A.apply(this,arguments)},window.WAPI.getAllGroups=function(e){var t=WPP.whatsapp.ChatStore.filter((e=>e.isGroup));return void 0!==e&&e(t),t},window.WAPI.getChat=function(e){if(!e)return!1;e="string"==typeof e?e:e._serialized;var t=WPP.whatsapp.ChatStore.get(e);return t&&(t.sendMessage=t.sendMessage?t.sendMessage:function(){return WPP.whatsapp.functions.sendTextMsgToChat(this,...arguments)}),t},window.WAPI.getChatByName=function(e,t){var n=WPP.whatsapp.ChatStore.find((t=>t.name===e));return void 0!==t&&t(n),n},window.WAPI.getNewId=function(){for(var e="",t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",n=0;n<20;n++)e+=t.charAt(Math.floor(Math.random()*t.length));return e},window.WAPI.getChatById=function(e,t){return T.apply(this,arguments)},window.WAPI.getUnreadMessagesInChat=function(e,t,n,r){for(var i=WAPI.getChat(e).msgs._models,o=[],a=i.length-1;a>=0;a--)if("remove"!==a){var s=i[a];if("boolean"==typeof s.isNewMsg&&!1!==s.isNewMsg){s.isNewMsg=!1;var u=WAPI.processMessageObj(s,t,n);u&&o.push(u)}}return void 0!==r&&r(o),o},window.WAPI.loadEarlierMessages=function(e){return oe.apply(this,arguments)},window.WAPI.loadAllEarlierMessages=Z,window.WAPI.asyncLoadAllEarlierMessages=function(e,t){Z(e),t()},window.WAPI.areAllMessagesLoaded=function(e,t){return WAPI.getChat(e).msgs.msgLoadState.noEarlierMsgs?(t&&t(!0),!0):(t&&t(!1),!1)},window.WAPI.loadEarlierMessagesTillDate=function(e,t,n){var r=WAPI.getChat(e);!function e(){r.msgs.getModelsArray()[0].t>t&&!r.msgs.msgLoadState.noEarlierMsgs?r.loadEarlierMsgs().then(e):n()}()},window.WAPI.getAllGroupMetadata=function(e){var t=WPP.whatsapp.GroupMetadataStore.map((e=>e.attributes));return void 0!==e&&e(t),t},window.WAPI.getGroupMetadata=function(e,t){return H.apply(this,arguments)},window.WAPI._getGroupParticipants=function(e){return q.apply(this,arguments)},window.WAPI.getGroupParticipantIDs=function(e,t){return D.apply(this,arguments)},window.WAPI.getAllMessagesInChat=function(e,t,n,r){return C.apply(this,arguments)},window.WAPI.loadAndGetAllMessagesInChat=function(e,t,n,r){return ne.apply(this,arguments)},window.WAPI.getUnreadMessages=function(e,t,n,r){var i=WPP.whatsapp.ChatStore.getModelsArray(),o=[];for(var a in i)if(!isNaN(a)){var s=i[a],u=WAPI._serializeChatObj(s);u.messages=[];for(var c=s.msgs._models,l=c.length-1;l>=0;l--){var d=c[l];if("boolean"==typeof d.isNewMsg&&!1!==d.isNewMsg){d.isNewMsg=!1;var f=WAPI.processMessageObj(d,e,t);f&&u.messages.push(f)}}if(u.messages.length>0)o.push(u);else if(n){for(var p=s.unreadCount,h=c.length-1;h>=0;h--){var w=c[h];if(p>0){if(!w.isSentByMe){var v=WAPI.processMessageObj(w,e,t);u.messages.unshift(v),p-=1}}else{if(-1!==p)break;if(!w.isSentByMe){var P=WAPI.processMessageObj(w,e,t);u.messages.unshift(P);break}}}u.messages.length>0&&(s.unreadCount=0,o.push(u))}}return void 0!==r&&r(o),o},window.WAPI.getCommonGroups=function(e,t){return N.apply(this,arguments)},window.WAPI.downloadFile=function(e){return o.apply(this,arguments)},window.WAPI.getNumberProfile=function(e,t){return K.apply(this,arguments)},window.WAPI.getMessageById=we,window.WAPI.getMessages=function(e){return $e.apply(this,arguments)},window.WAPI.getFileHash=l,window.WAPI.generateMediaKey=f,window.WAPI.arrayBufferToBase64=function(e){for(var t,n="",r="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",i=new Uint8Array(e),o=i.byteLength,a=o%3,s=o-a,u=0;u<s;u+=3)n+=r[(16515072&(t=i[u]<<16|i[u+1]<<8|i[u+2]))>>18]+r[(258048&t)>>12]+r[(4032&t)>>6]+r[63&t];return 1==a?n+=r[(252&(t=i[s]))>>2]+r[(3&t)<<4]+"==":2==a&&(n+=r[(64512&(t=i[s]<<8|i[s+1]))>>10]+r[(1008&t)>>4]+r[(15&t)<<2]+"="),n},window.WAPI.getListMute=function(){return Mt.apply(this,arguments)},window.WAPI.getHost=function(){return WPP.whatsapp.Conn.attributes},window.WAPI.getWid=function(){var e;return null===(e=WPP.whatsapp.UserPrefs.getMaybeMeUser())||void 0===e?void 0:e._serialized},window.WAPI.getMe=function(e){var t=WPP.whatsapp.ContactStore.get(WPP.whatsapp.UserPrefs.getMaybeMeUser());return void 0!==e&&e(t.all),t.all},window.WAPI.isConnected=function(e){var t=null==document.querySelector('[data-testid="alert-phone"]')&&null==document.querySelector('[data-testid="alert-computer"]');return void 0!==e&&e(t),t},window.WAPI.isLoggedIn=function(e){var t=WPP.whatsapp.ContactStore&&void 0!==WPP.whatsapp.ContactStore.checksum;return void 0!==e&&e(t),t},window.WAPI.getBatteryLevel=function(){return WPP.whatsapp.Conn.attributes.battery},window.WAPI.base64ImageToFile=a,window.WAPI.base64ToFile=a,window.WAPI.sendMute=function(e,t,n){return Wt.apply(this,arguments)},window.WAPI.startPhoneWatchdog=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:15e3;kt(),Et=setInterval(jt,e)},window.WAPI.stopPhoneWatchdog=kt,window.WAPI.subscribePresence=function(e){return Rt.apply(this,arguments)},window.WAPI.unsubscribePresence=function(e){return Ft.apply(this,arguments)},window.WAPI.getBusinessProfilesProducts=function(e){return rn.apply(this,arguments)},window.WAPI.getOrderbyMsg=function(e){return sn.apply(this,arguments)},window.WAPI._newMessagesQueue=[],window.WAPI._newMessagesBuffer=null!=sessionStorage.getItem("saved_msgs")?JSON.parse(sessionStorage.getItem("saved_msgs")):[],window.WAPI._newMessagesDebouncer=null,window.WAPI._newMessagesCallbacks=[],window.addEventListener("unload",window.WAPI._unloadInform,!1),window.addEventListener("beforeunload",window.WAPI._unloadInform,!1),window.addEventListener("pageunload",window.WAPI._unloadInform,!1),window.WAPI.getProfilePicSmallFromId=function(){var e=ln((function*(e){return yield WPP.whatsapp.ProfilePicThumbStore.find(e).then(function(){var e=ln((function*(e){return void 0!==e.img&&(yield window.WAPI.downloadFileWithCredentials(e.img))}));return function(t){return e.apply(this,arguments)}}(),(function(e){return!1}))}));return function(t){return e.apply(this,arguments)}}(),window.WAPI.getProfilePicFromId=function(){var e=ln((function*(e){return yield WPP.whatsapp.ProfilePicThumbStore.find(e).then(function(){var e=ln((function*(e){return void 0!==e.imgFull&&(yield window.WAPI.downloadFileWithCredentials(e.imgFull))}));return function(t){return e.apply(this,arguments)}}(),(function(e){return!1}))}));return function(t){return e.apply(this,arguments)}}(),window.WAPI.downloadFileWithCredentials=function(){var e=ln((function*(e){if(!axios||!e)return!1;var t=(yield axios.get(e,{responseType:"arraybuffer"})).data;return btoa(new Uint8Array(t).reduce(((e,t)=>e+String.fromCharCode(t)),""))}));return function(t){return e.apply(this,arguments)}}(),window.WAPI._serializeNumberStatusObj=e=>null==e?null:Object.assign({},{id:e.jid,status:e.status,isBusiness:!0===e.biz,canReceiveMessage:200===e.status}),window.WAPI.checkNumberStatus=function(){var e=ln((function*(e){var t=yield WPP.contact.queryExists(e);return t?{id:t.wid,isBusiness:t.biz,canReceiveMessage:!0,numberExists:!0,status:200}:{id:e,isBusiness:!1,canReceiveMessage:!1,numberExists:!1,status:404}}));return function(t){return e.apply(this,arguments)}}(),window.WAPI.getChatIsOnline=function(){var e=ln((function*(e){var t=WPP.whatsapp.ChatStore.get(e);return!!t&&(yield t.presence.subscribe(),t.presence.attributes.isOnline)}));return function(t){return e.apply(this,arguments)}}(),window.WAPI.getLastSeen=function(){var e=ln((function*(e){var t=WPP.whatsapp.ChatStore.get(e);return!!t&&(t.presence.hasData||(yield t.presence.subscribe(),yield new Promise((e=>setTimeout(e,100)))),t.presence.chatstate.t||!1)}));return function(t){return e.apply(this,arguments)}}(),window.WAPI.getWAVersion=function(){return window.Debug.VERSION},window.WAPI.archiveChat=function(){var e=ln((function*(e,t){var n=Store.Archive.setArchive(WPP.whatsapp.ChatStore.get(e),t).then((e=>!0)).catch((e=>!1));return yield Promise.resolve(n)}));return function(t,n){return e.apply(this,arguments)}}(),window.WAPI.takeOver=ln((function*(){return yield WPP.whatsapp.Socket.takeover(),!0})),window.WAPI.onIncomingCall=function(e){return WPP.whatsapp.CallStore.on("add",e),!0},window.WAPI.onInterfaceChange=function(e){var t=()=>({displayInfo:WPP.whatsapp.Stream.displayInfo,mode:WPP.whatsapp.Stream.mode,info:WPP.whatsapp.Stream.info});return e(t()),WPP.whatsapp.Stream.on("change:info change:displayInfo change:mode",(()=>{e(t())})),!0},window.WAPI.setMessagesAdminsOnly=function(){var e=ln((function*(e,t){return yield WPP.group.setProperty(e,"announcement",t),!0}));return function(t,n){return e.apply(this,arguments)}}(),window.WAPI.logout=ln((function*(){return yield WPP.conn.logout()})),window.WAPI.isRegistered=function(){return WPP.webpack.search((e=>e.isRegistered)).isRegistered()},fn.then((function(){var e=!1,t=()=>WPP.whatsapp.Socket.stream;window.WAPI.onStreamChange=function(n){return WPP.whatsapp.Socket.on("change:stream",(()=>n(t()))),e||(e=!0,n(t())),!0}})),fn.then((function(){var e=!1,t=()=>WPP.whatsapp.Socket.state;window.WAPI.onStateChange=function(n){return WPP.whatsapp.Socket.on("change:state",(()=>n(t()))),e||(e=!0,n(t())),!0}})),fn.then((function(){window.WAPI._newMessagesListener=WPP.whatsapp.MsgStore.on("add",(e=>{e&&e.isNewMsg&&!e.isSentByMe&&!e.isStatusV3&&setTimeout((()=>{var t=window.WAPI.processMessageObj(e,!1,!1);t&&(window.WAPI._newMessagesQueue.push(t),window.WAPI._newMessagesBuffer.push(t)),!window.WAPI._newMessagesDebouncer&&window.WAPI._newMessagesQueue.length>0&&(window.WAPI._newMessagesDebouncer=setTimeout((()=>{var e=window.WAPI._newMessagesQueue;window.WAPI._newMessagesDebouncer=null,window.WAPI._newMessagesQueue=[];var t=[];window.WAPI._newMessagesCallbacks.forEach((function(n){void 0!==n.callback&&n.callback(e),!0===n.rmAfterUse&&t.push(n)})),t.forEach((function(e){var t=window.WAPI._newMessagesCallbacks.indexOf(e);window.WAPI._newMessagesCallbacks.splice(t,1)}))}),1e3))}),e.body?0:2e3)})),window.WAPI._unloadInform=e=>{window.WAPI._newMessagesBuffer.forEach((e=>{Object.keys(e).forEach((t=>void 0===e[t]?delete e[t]:""))})),sessionStorage.setItem("saved_msgs",JSON.stringify(window.WAPI._newMessagesBuffer)),window.WAPI._newMessagesCallbacks.forEach((function(e){void 0!==e.callback&&e.callback({status:-1,message:"page will be reloaded, wait and register callback again."})}))}})),fn.then((function(){window.WAPI.waitNewMessages=Kt})),fn.then((function(){window.WAPI.allNewMessagesListener=e=>WPP.whatsapp.MsgStore.on("add",(t=>{t&&t.isNewMsg&&setTimeout((()=>{var n=window.WAPI.processMessageObj(t,!0,!1);n&&e(n)}),t.body?0:2e3)}))})),fn.then((function(){window.WAPI.waitNewAcknowledgements=function(e){return WPP.whatsapp.MsgStore.on("change:ack",e),!0}})),fn.then((function(){window.WAPI.onAddedToGroup=function(e){return WPP.whatsapp.MsgStore.on("add",(t=>{if(t.isNewMsg&&t.isNotification&&"gp2"===t.type&&"add"===t.subtype)try{var n=WAPI._serializeChatObj(t.chat);e(n)}catch(e){console.error(e)}})),!0}})),fn.then((function(){var e=[];function t(t){var n=Object.assign({},t);n.jid&&(n.id=n.jid.toString());for(var r=0,i=e;r<i.length;r++){var o=i[r];try{o(n)}catch(e){}}}WPP.on("chat.live_location_start",(e=>{t({type:"enable",id:e.id.toString(),lat:e.lat,lng:e.lng,accuracy:e.accuracy,speed:e.speed,degrees:e.degrees,shareDuration:e.shareDuration})})),WPP.on("chat.live_location_update",(e=>{t({type:"update",id:e.id.toString(),lat:e.lat,lng:e.lng,accuracy:e.accuracy,speed:e.speed,degrees:e.degrees,elapsed:e.elapsed,lastUpdated:e.lastUpdated})})),WPP.on("chat.live_location_end",(e=>{t({type:"disablle",id:e.id.toString(),chat:e.chat.toString()})})),window.WAPI.onLiveLocation=function(){var t,n=(t=function*(t){e.push(t)},function(){var e=this,n=arguments;return new Promise((function(r,i){var o=t.apply(e,n);function a(e){Qt(o,r,i,a,s,"next",e)}function s(e){Qt(o,r,i,a,s,"throw",e)}a(void 0)}))});return function(e){return n.apply(this,arguments)}}()})),fn.then((function(){window.WAPI.onParticipantsChanged=function(){var e,t=(e=function*(e,t){var n=["invite","add","remove","leave","promote","demote"],r=WPP.whatsapp.ChatStore.get(e),i=WPP.whatsapp.GroupMetadataStore.get(e);Zt[e]||(Zt[e]={},i.participants.forEach((t=>{Zt[e][t.id.toString()]={subtype:"add",from:i.owner}})));var o=0;return r.on("change:groupMetadata.participants",(i=>r.on("all",((i,a)=>{var s=a.isGroup,u=a.previewMessage;if(s&&"change"===i&&u&&"gp2"===u.type&&n.includes(u.subtype)){var c=u.subtype,l=u.from,d=u.recipients,f=d[0].toString();Zt[e][f]&&Zt[e][d[0]].subtype==c||(0==o?o++:(Zt[e][f]={subtype:c,from:l},t({by:l.toString(),action:c,who:d}),r.off("all",this),o=0))}})))),!0},function(){var t=this,n=arguments;return new Promise((function(r,i){var o=e.apply(t,n);function a(e){Xt(o,r,i,a,s,"next",e)}function s(e){Xt(o,r,i,a,s,"throw",e)}a(void 0)}))});return function(e,n){return t.apply(this,arguments)}}()})),fn.then((function(){window.WAPI.onNotificationMessage=function(e){return WPP.whatsapp.MsgStore.on("add",(t=>{if(t.isNotification&&t.isNewMsg){var n=WAPI._serializeMessageObj(t);e(n)}})),!0}})),fn.then((function(){window.WAPI.onPresenceChanged=function(e){return setTimeout((()=>{WPP.whatsapp.ChatStore.map((e=>e.presence.subscribe()))}),1e3),WPP.whatsapp.PresenceStore.on("change:chatstate.type",(t=>{try{var n=WPP.whatsapp.PresenceStore.getModelsArray().find((e=>e.chatstate===t));if(!n||!n.hasData||!n.chatstate.type)return;var r=WPP.whatsapp.ContactStore.get(n.id),i={id:n.id,isOnline:n.isOnline,isGroup:n.isGroup,isUser:n.isUser,shortName:r?r.formattedShortName:"",state:n.chatstate.type,t:Date.now()};n.isUser&&(i.isContact=!n.chatstate.deny),n.isGroup&&(i.participants=n.chatstates.getModelsArray().filter((e=>!!e.type)).map((e=>{var t=WPP.whatsapp.ContactStore.get(e.id);return{id:e.id.toString(),state:e.type,shortName:t?t.formattedShortName:""}}))),e(i)}catch(e){console.log(e)}})),!0}})))},602:e=>{var t=function(e){"use strict";var t,n=Object.prototype,r=n.hasOwnProperty,i=Object.defineProperty||function(e,t,n){e[t]=n.value},o="function"==typeof Symbol?Symbol:{},a=o.iterator||"@@iterator",s=o.asyncIterator||"@@asyncIterator",u=o.toStringTag||"@@toStringTag";function c(e,t,n){return Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}),e[t]}try{c({},"")}catch(e){c=function(e,t,n){return e[t]=n}}function l(e,t,n,r){var o=t&&t.prototype instanceof v?t:v,a=Object.create(o.prototype),s=new E(r||[]);return i(a,"_invoke",{value:S(e,n,s)}),a}function d(e,t,n){try{return{type:"normal",arg:e.call(t,n)}}catch(e){return{type:"throw",arg:e}}}e.wrap=l;var f="suspendedStart",p="executing",h="completed",w={};function v(){}function P(){}function y(){}var g={};c(g,a,(function(){return this}));var m=Object.getPrototypeOf,A=m&&m(m(_([])));A&&A!==n&&r.call(A,a)&&(g=A);var b=y.prototype=v.prototype=Object.create(g);function W(e){["next","throw","return"].forEach((function(t){c(e,t,(function(e){return this._invoke(t,e)}))}))}function I(e,t){function n(i,o,a,s){var u=d(e[i],e,o);if("throw"!==u.type){var c=u.arg,l=c.value;return l&&"object"==typeof l&&r.call(l,"__await")?t.resolve(l.__await).then((function(e){n("next",e,a,s)}),(function(e){n("throw",e,a,s)})):t.resolve(l).then((function(e){c.value=e,a(c)}),(function(e){return n("throw",e,a,s)}))}s(u.arg)}var o;i(this,"_invoke",{value:function(e,r){function i(){return new t((function(t,i){n(e,r,t,i)}))}return o=o?o.then(i,i):i()}})}function S(e,t,n){var r=f;return function(i,o){if(r===p)throw new Error("Generator is already running");if(r===h){if("throw"===i)throw o;return j()}for(n.method=i,n.arg=o;;){var a=n.delegate;if(a){var s=M(a,n);if(s){if(s===w)continue;return s}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(r===f)throw r=h,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);r=p;var u=d(e,t,n);if("normal"===u.type){if(r=n.done?h:"suspendedYield",u.arg===w)continue;return{value:u.arg,done:n.done}}"throw"===u.type&&(r=h,n.method="throw",n.arg=u.arg)}}}function M(e,n){var r=n.method,i=e.iterator[r];if(i===t)return n.delegate=null,"throw"===r&&e.iterator.return&&(n.method="return",n.arg=t,M(e,n),"throw"===n.method)||"return"!==r&&(n.method="throw",n.arg=new TypeError("The iterator does not provide a '"+r+"' method")),w;var o=d(i,e.iterator,n.arg);if("throw"===o.type)return n.method="throw",n.arg=o.arg,n.delegate=null,w;var a=o.arg;return a?a.done?(n[e.resultName]=a.value,n.next=e.nextLoc,"return"!==n.method&&(n.method="next",n.arg=t),n.delegate=null,w):a:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,w)}function C(e){var t={tryLoc:e[0]};1 in e&&(t.catchLoc=e[1]),2 in e&&(t.finallyLoc=e[2],t.afterLoc=e[3]),this.tryEntries.push(t)}function O(e){var t=e.completion||{};t.type="normal",delete t.arg,e.completion=t}function E(e){this.tryEntries=[{tryLoc:"root"}],e.forEach(C,this),this.reset(!0)}function _(e){if(e){var n=e[a];if(n)return n.call(e);if("function"==typeof e.next)return e;if(!isNaN(e.length)){var i=-1,o=function n(){for(;++i<e.length;)if(r.call(e,i))return n.value=e[i],n.done=!1,n;return n.value=t,n.done=!0,n};return o.next=o}}return{next:j}}function j(){return{value:t,done:!0}}return P.prototype=y,i(b,"constructor",{value:y,configurable:!0}),i(y,"constructor",{value:P,configurable:!0}),P.displayName=c(y,u,"GeneratorFunction"),e.isGeneratorFunction=function(e){var t="function"==typeof e&&e.constructor;return!!t&&(t===P||"GeneratorFunction"===(t.displayName||t.name))},e.mark=function(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,y):(e.__proto__=y,c(e,u,"GeneratorFunction")),e.prototype=Object.create(b),e},e.awrap=function(e){return{__await:e}},W(I.prototype),c(I.prototype,s,(function(){return this})),e.AsyncIterator=I,e.async=function(t,n,r,i,o){void 0===o&&(o=Promise);var a=new I(l(t,n,r,i),o);return e.isGeneratorFunction(n)?a:a.next().then((function(e){return e.done?e.value:a.next()}))},W(b),c(b,u,"Generator"),c(b,a,(function(){return this})),c(b,"toString",(function(){return"[object Generator]"})),e.keys=function(e){var t=Object(e),n=[];for(var r in t)n.push(r);return n.reverse(),function e(){for(;n.length;){var r=n.pop();if(r in t)return e.value=r,e.done=!1,e}return e.done=!0,e}},e.values=_,E.prototype={constructor:E,reset:function(e){if(this.prev=0,this.next=0,this.sent=this._sent=t,this.done=!1,this.delegate=null,this.method="next",this.arg=t,this.tryEntries.forEach(O),!e)for(var n in this)"t"===n.charAt(0)&&r.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=t)},stop:function(){this.done=!0;var e=this.tryEntries[0].completion;if("throw"===e.type)throw e.arg;return this.rval},dispatchException:function(e){if(this.done)throw e;var n=this;function i(r,i){return s.type="throw",s.arg=e,n.next=r,i&&(n.method="next",n.arg=t),!!i}for(var o=this.tryEntries.length-1;o>=0;--o){var a=this.tryEntries[o],s=a.completion;if("root"===a.tryLoc)return i("end");if(a.tryLoc<=this.prev){var u=r.call(a,"catchLoc"),c=r.call(a,"finallyLoc");if(u&&c){if(this.prev<a.catchLoc)return i(a.catchLoc,!0);if(this.prev<a.finallyLoc)return i(a.finallyLoc)}else if(u){if(this.prev<a.catchLoc)return i(a.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<a.finallyLoc)return i(a.finallyLoc)}}}},abrupt:function(e,t){for(var n=this.tryEntries.length-1;n>=0;--n){var i=this.tryEntries[n];if(i.tryLoc<=this.prev&&r.call(i,"finallyLoc")&&this.prev<i.finallyLoc){var o=i;break}}o&&("break"===e||"continue"===e)&&o.tryLoc<=t&&t<=o.finallyLoc&&(o=null);var a=o?o.completion:{};return a.type=e,a.arg=t,o?(this.method="next",this.next=o.finallyLoc,w):this.complete(a)},complete:function(e,t){if("throw"===e.type)throw e.arg;return"break"===e.type||"continue"===e.type?this.next=e.arg:"return"===e.type?(this.rval=this.arg=e.arg,this.method="return",this.next="end"):"normal"===e.type&&t&&(this.next=t),w},finish:function(e){for(var t=this.tryEntries.length-1;t>=0;--t){var n=this.tryEntries[t];if(n.finallyLoc===e)return this.complete(n.completion,n.afterLoc),O(n),w}},catch:function(e){for(var t=this.tryEntries.length-1;t>=0;--t){var n=this.tryEntries[t];if(n.tryLoc===e){var r=n.completion;if("throw"===r.type){var i=r.arg;O(n)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(e,n,r){return this.delegate={iterator:_(e),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=t),w}},e}(e.exports);try{regeneratorRuntime=t}catch(e){"object"==typeof globalThis?globalThis.regeneratorRuntime=t:Function("r","regeneratorRuntime = r")(t)}}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var o=t[r]={exports:{}};return e[r].call(o.exports,o,o.exports,n),o.exports}n(602),n(976)})();
+(function() {
+    function getStore(modules) {
+        let foundCount = 0;
+        let neededObjects = [
+            { id: "Store", conditions: (module) => (module.default && module.default.Chat && module.default.Msg) ? module.default : null },
+            { id: "MediaCollection", conditions: (module) => (module.default && module.default.prototype && module.default.prototype.processAttachments) ? module.default : null },
+            { id: "MediaProcess", conditions: (module) => (module.BLOB) ? module : null },
+            { id: "ServiceWorker", conditions: (module) => (module.default && module.default.killServiceWorker) ? module : null },
+            { id: "State", conditions: (module) => (module.STATE && module.STREAM) ? module : null },
+            { id: "WapDelete", conditions: (module) => (module.sendConversationDelete && module.sendConversationDelete.length == 2) ? module : null },
+            { id: "WapQuery", conditions: (module) => (module.default && module.instance && module.instance.queryExist) ? module.instance : null },
+            { id: "CryptoLib", conditions: (module) => (module.decryptE2EMedia) ? module : null },
+            { id: "OpenChat", conditions: (module) => (module.default && module.default.prototype && module.default.prototype.openChat) ? module.default : null },
+            { id: "UserConstructor", conditions: (module) => (module.default && module.default.prototype && module.default.prototype.isServer && module.default.prototype.isUser) ? module.default : null },
+            { id: "SendTextMsgToChat", conditions: (module) => (module.sendTextMsgToChat) ? module.sendTextMsgToChat : null },
+            { id: "sendDelete", conditions: (module) => (module.sendDelete) ? module.sendDelete : null },
+            { id: "FeatureChecker", conditions: (module) => (module && module.getProtobufFeatureName) ? module : null },
+            { id: "GetMaybeMeUser", conditions: (module) => (module && module.getMaybeMeUser) ? module : null },
+            { id: "FindChat", conditions: (module) => module.findChat ? module : module.default && module.default.findChat ? module.default : null },
+            { id: "QueryExist2", conditions: (module) => (module.queryExist) ? module : null },
+            { id: "AppState", conditions: (module) => (module && module.Socket) ? module.Socket : null },
+            { id: "Conn", conditions: (module) => (module && module.Conn) ? module.Conn : null },
+            { id: "BlockContact", conditions: (module) => (module && module.blockContact) ? module : null },
+            { id: "Call", conditions: (module) => (module && module.CallCollection) ? module.CallCollection : null },
+            { id: "Cmd", conditions: (module) => (module && module.Cmd) ? module.Cmd : null },
+            { id: "DownloadManager", conditions: (module) => (module && module.downloadManager) ? module.downloadManager : null },
+            { id: "MDBackend", conditions: (module) => (module && module.isMDBackend) ? module.isMDBackend() : null },
+            { id: "Features", conditions: (module) => (module && module.FEATURE_CHANGE_EVENT) ? module.LegacyPhoneFeatures : null },
+            { id: "GroupMetadata", conditions: (module) => (module.default && module.default.handlePendingInvite) ? module.default : null },
+            { id: "Invite", conditions: (module) => (module && module.sendJoinGroupViaInvite) ? module : null },
+            { id: "InviteInfo", conditions: (module) => (module && module.sendQueryGroupInvite) ? module : null },
+            { id: "Label", conditions: (module) => (module && module.LabelCollection) ? module.LabelCollection : null },
+            { id: "MediaPrep", conditions: (module) => (module && module.prepRawMedia) ? module :null },
+            { id: "MediaObject", conditions: (module) => (module && module.getOrCreateMediaObject) ? module : null },
+            { id: "NumberInfo", conditions: (module) => (module && module.formattedPhoneNumber) ? module : null },
+            { id: "MediaTypes", conditions: (module) => (module && module.msgToMediaType) ? module : null },
+            { id: "MediaUpload", conditions: (module) => (module && module.uploadMedia) ? module : null },
+            { id: "MsgKey", conditions: (module) => (module.default && module.default.fromString) ? module.default : null },
+            { id: "MessageInfo", conditions: (module) => (module && module.sendQueryMsgInfo) ? module : null },
+            { id: "OpaqueData", conditions: (module) => (module.default && module.default.createFromData) ? module.default : null },
+            { id: "QueryExist", conditions: (module) => (module && module.queryExists) ? module.queryExists : null },
+            { id: "QueryProduct", conditions: (module) => (module && module.queryProduct) ? module : null },
+            { id: "QueryOrder", conditions: (module) => (module && module.queryOrder) ? module : null },
+            { id: "SendClear", conditions: (module) => (module && module.sendClear) ? module : null },
+            { id: "SendDelete", conditions: (module) => (module && module.sendDelete) ? module : null },
+            { id: "SendMessage", conditions: (module) => (module && module.addAndSendMsgToChat) ? module : null },
+            { id: "SendSeen", conditions: (module) => (module && module.sendSeen) ? module : null },
+            { id: "User", conditions: (module) => (module && module.getMaybeMeUser) ? module : null },
+            { id: "UploadUtils", conditions: (module) => (module.default && module.default.encryptAndUpload) ? module.default : null },
+            { id: "Validators", conditions: (module) => (module && module.findLinks) ? module : null },
+            { id: "VCard", conditions: (module) => (module && module.vcardFromContactModel) ? module : null },
+            { id: "Wap", conditions: (module) => (module && module.queryLinkPreview) ? module.default : null },
+            { id: "WidFactory", conditions: (module) => (module && module.createWid) ? module : null },
+            { id: "ProfilePic", conditions: (module) => (module && module.profilePicResync) ? module : null },
+            { id: "PresenceUtils", conditions: (module) => (module && module.sendPresenceAvailable) ? module : null },
+            { id: "ChatState", conditions: (module) => (module && module.sendChatStateComposing) ? module : null },
+            { id: "GroupParticipants", conditions: (module) => (module && module.sendPromoteParticipants) ? module : null },
+            { id: "JoinInviteV4", conditions: (module) => (module && module.sendJoinGroupViaInviteV4) ? module : null },
+            { id: "findCommonGroups", conditions: (module) => (module && module.findCommonGroups) ? module.findCommonGroups : null },
+            { id: "StatusUtils", conditions: (module) => (module && module.setMyStatus) ? module : null },
+            { id: "ConversationMsgs", conditions: (module) => (module && module.loadEarlierMsgs) ? module : null },
+            { id: "sendReactionToMsg", conditions: (module) => (module && module.sendReactionToMsg) ? module.sendReactionToMsg : null },
+            { id: "StickerTools", conditions: (module) => (module && module.toWebpSticker) ? module : null },
+            { id: "addWebpMetadata", conditions: (module) => (module && module.addWebpMetadata) ? module : null },
+            { id: "GroupUtils", conditions: (module) => (module && module.sendCreateGroup) ? module : null },
+            { id: "sendSetGroupSubject", conditions: (module) => (module && module.sendSetGroupSubject) ? module : null },
+            { id: "markExited", conditions: (module) => (module && module.markExited) ? module : null },
+
+            { id: "addAndSendMsgToChat", conditions: (e) => (e.addAndSendMsgToChat ? e.addAndSendMsgToChat : null) },
+            { id: "MaybeMeUser", conditions: (e) => (e.getMaybeMeUser ? e : null) },
+            { id: "Archive", conditions: (module) => (module.setArchive) ? module : null },
+            { id: "GroupInvite", conditions: (module) => (module.queryGroupInviteCode) ? module : null },
+            { id: "Builders", conditions: (module) => (module.TemplateMessage && module.HydratedFourRowTemplate) ? module : null },
+            { id: "createMessageKey", conditions: (module) => (module.createMessageKey && module.createDeviceSentMessage) ? module.createMessageKey : null },
+
+        ];
+
+        window.x = [];
+        for (let idx in modules) {
+            // const module = modules[idx];
+            // if (module && (module.queryExist || (module.default && module.default.queryExist) || (module.instance && module.instance.queryExist))) {
+            //   console.log(module);
+            //   window.x.push(module);
+            // }
+
+            if ((typeof modules[idx] === "object") && (modules[idx] !== null)) {
+                neededObjects.forEach((needObj) => {
+                    if (!needObj.conditions || needObj.foundedModule)
+                        return;
+                    let neededModule = needObj.conditions(modules[idx]);
+                    if (neededModule !== null) {
+                        foundCount++;
+                        needObj.foundedModule = neededModule;
+                    }
+                });
+            }
+        }
+
+        let neededStore = neededObjects.find((needObj) => needObj.id === "Store");
+        window.Store = neededStore.foundedModule ? neededStore.foundedModule : {};
+        neededObjects.splice(neededObjects.indexOf(neededStore), 1);
+        neededObjects.forEach((needObj) => {
+            if (needObj.foundedModule) {
+                window.Store[needObj.id] = needObj.foundedModule;
+            }
+        });
+
+        window.Store.Chat._find = e => {
+            const target = window.Store.Chat.get(e)
+            return target ? Promise.resolve(target) : Promise.resolve({
+                id: e
+            })
+        }
+
+        window.Store.Chat.modelClass.prototype.sendMessage = function(e) {
+            window.Store.SendTextMsgToChat(this, ...arguments);
+        }
+
+        return window.Store;
+    }
+
+    if (typeof webpackJsonp === 'function') {
+        webpackJsonp([], { 'parasite': (x, y, z) => getStore(z) }, ['parasite']);
+    } else {
+        let tag = new Date().getTime();
+        webpackChunkwhatsapp_web_client.push([
+            ["parasite" + tag],
+            {
+
+            },
+            function(o, e, t) {
+                let modules = [];
+                for (let idx in o.m) {
+                    let module = o(idx);
+                    modules.push(module);
+                }
+                getStore(modules);
+            }
+        ]);
+    }
+
+})();
+
+
+//  *************** whatsapp_web.js **************
+function whatsapp_web_js_clint() {
+    window.WWebJS = {};
+    window.WWebJS.sendSeen = async(chatId) => {
+        let chat = window.Store.Chat.get(chatId);
+        if (chat !== undefined) {
+            await window.Store.SendSeen.sendSeen(chat, false);
+            return true;
+        }
+        return false;
+
+    };
+    window.WWebJS.sendMessage = async(chat, content, options = {}) => {
+        let attOptions = {};
+        if (options.attachment) {
+            attOptions = options.sendMediaAsSticker ?
+                await window.WWebJS.processStickerData(options.attachment) :
+                await window.WWebJS.processMediaData(options.attachment, {
+                    forceVoice: options.sendAudioAsVoice,
+                    forceDocument: options.sendMediaAsDocument,
+                    forceGif: options.sendVideoAsGif
+                });
+
+            content = options.sendMediaAsSticker ? undefined : attOptions.preview;
+
+            delete options.attachment;
+            delete options.sendMediaAsSticker;
+        }
+        let quotedMsgOptions = {};
+        if (options.quotedMessageId) {
+            let quotedMessage = window.Store.Msg.get(options.quotedMessageId);
+            if (quotedMessage.canReply()) {
+                quotedMsgOptions = quotedMessage.msgContextInfo(chat);
+            }
+            delete options.quotedMessageId;
+        }
+
+        if (options.mentionedJidList) {
+            options.mentionedJidList = options.mentionedJidList.map(cId => window.Store.Contact.get(cId).id);
+        }
+
+        let locationOptions = {};
+        if (options.location) {
+            locationOptions = {
+                type: 'location',
+                loc: options.location.description,
+                lat: options.location.latitude,
+                lng: options.location.longitude
+            };
+            delete options.location;
+        }
+
+        let vcardOptions = {};
+        if (options.contactCard) {
+            let contact = window.Store.Contact.get(options.contactCard);
+            vcardOptions = {
+                body: window.Store.VCard.vcardFromContactModel(contact).vcard,
+                type: 'vcard',
+                vcardFormattedName: contact.formattedName
+            };
+            delete options.contactCard;
+        } else if (options.contactCardList) {
+            let contacts = options.contactCardList.map(c => window.Store.Contact.get(c));
+            let vcards = contacts.map(c => window.Store.VCard.vcardFromContactModel(c));
+            vcardOptions = {
+                type: 'multi_vcard',
+                vcardList: vcards,
+                body: undefined
+            };
+            delete options.contactCardList;
+        } else if (options.parseVCards && typeof(content) === 'string' && content.startsWith('BEGIN:VCARD')) {
+            delete options.parseVCards;
+            try {
+                const parsed = window.Store.VCard.parseVcard(content);
+                if (parsed) {
+                    vcardOptions = {
+                        type: 'vcard',
+                        vcardFormattedName: window.Store.VCard.vcardGetNameFromParsed(parsed)
+                    };
+                }
+            } catch (_) {
+                // not a vcard
+            }
+        }
+
+        if (options.linkPreview) {
+            delete options.linkPreview;
+
+            // Not supported yet by WhatsApp Web on MD
+            if (!window.Store.MDBackend) {
+                const link = window.Store.Validators.findLink(content);
+                if (link) {
+                    const preview = await window.Store.Wap.queryLinkPreview(link.url);
+                    preview.preview = true;
+                    preview.subtype = 'url';
+                    options = {...options, ...preview };
+                }
+            }
+        }
+
+        let buttonOptions = {};
+        if (options.buttons) {
+            let caption;
+            if (options.buttons.type === 'chat') {
+                content = options.buttons.body;
+                caption = content;
+            } else {
+                caption = options.caption ? options.caption : ' '; //Caption can't be empty
+            }
+            buttonOptions = {
+                productHeaderImageRejected: false,
+                isFromTemplate: false,
+                isDynamicReplyButtonsMsg: true,
+                title: options.buttons.title ? options.buttons.title : undefined,
+                footer: options.buttons.footer ? options.buttons.footer : undefined,
+                dynamicReplyButtons: options.buttons.buttons,
+                replyButtons: options.buttons.buttons,
+                caption: caption
+            };
+            delete options.buttons;
+        }
+
+        let listOptions = {};
+        if (options.list) {
+            if (window.Store.Conn.platform === 'smba' || window.Store.Conn.platform === 'smbi') {
+                throw '[LT01] Whatsapp business can\'t send this yet';
+            }
+            listOptions = {
+                type: 'list',
+                footer: options.list.footer,
+                list: {
+                    ...options.list,
+                    listType: 1
+                },
+                body: options.list.description
+            };
+            delete options.list;
+            delete listOptions.list.footer;
+        }
+
+        const meUser = window.Store.User.getMaybeMeUser();
+        const isMD = window.Store.MDBackend;
+
+        const newMsgId = new window.Store.MsgKey({
+            from: meUser,
+            to: chat.id,
+            id: window.Store.MsgKey.newId(),
+            participant: isMD && chat.id.isGroup() ? meUser : undefined,
+            selfDir: 'out',
+        });
+
+        const extraOptions = options.extraOptions || {};
+        delete options.extraOptions;
+
+        const ephemeralSettings = {
+            ephemeralDuration: chat.isEphemeralSettingOn() ? chat.getEphemeralSetting() : undefined,
+            ephemeralSettingTimestamp: chat.getEphemeralSettingTimestamp() || undefined,
+            disappearingModeInitiator: chat.getDisappearingModeInitiator() || undefined,
+        };
+
+        const message = {
+            ...options,
+            id: newMsgId,
+            ack: 0,
+            body: content,
+            from: meUser,
+            to: chat.id,
+            local: true,
+            self: 'out',
+            t: parseInt(new Date().getTime() / 1000),
+            isNewMsg: true,
+            type: 'chat',
+            ...ephemeralSettings,
+            ...locationOptions,
+            ...attOptions,
+            ...quotedMsgOptions,
+            ...vcardOptions,
+            ...buttonOptions,
+            ...listOptions,
+            ...extraOptions
+        };
+
+        await window.Store.SendMessage.addAndSendMsgToChat(chat, message);
+        return window.Store.Msg.get(newMsgId._serialized);
+    };
+    window.WWebJS.toStickerData = async(mediaInfo) => {
+        if (mediaInfo.mimetype == 'image/webp') return mediaInfo;
+
+        const file = window.WWebJS.mediaInfoToFile(mediaInfo);
+        const webpSticker = await window.Store.StickerTools.toWebpSticker(file);
+        const webpBuffer = await webpSticker.arrayBuffer();
+        const data = window.WWebJS.arrayBufferToBase64(webpBuffer);
+
+        return {
+            mimetype: 'image/webp',
+            data
+        };
+    };
+    window.WWebJS.processStickerData = async(mediaInfo) => {
+        if (mediaInfo.mimetype !== 'image/webp') throw new Error('Invalid media type');
+
+        const file = window.WWebJS.mediaInfoToFile(mediaInfo);
+        let filehash = await window.WWebJS.getFileHash(file);
+        let mediaKey = await window.WWebJS.generateHash(32);
+
+        const controller = new AbortController();
+        const uploadedInfo = await window.Store.UploadUtils.encryptAndUpload({
+            blob: file,
+            type: 'sticker',
+            signal: controller.signal,
+            mediaKey
+        });
+
+        const stickerInfo = {
+            ...uploadedInfo,
+            clientUrl: uploadedInfo.url,
+            deprecatedMms3Url: uploadedInfo.url,
+            uploadhash: uploadedInfo.encFilehash,
+            size: file.size,
+            type: 'sticker',
+            filehash
+        };
+
+        return stickerInfo;
+    };
+    window.WWebJS.processMediaData = async(mediaInfo, { forceVoice, forceDocument, forceGif }) => {
+        const file = window.WWebJS.mediaInfoToFile(mediaInfo);
+        const mData = await window.Store.OpaqueData.createFromData(file, file.type);
+        const mediaPrep = window.Store.MediaPrep.prepRawMedia(mData, { asDocument: forceDocument });
+        const mediaData = await mediaPrep.waitForPrep();
+        const mediaObject = window.Store.MediaObject.getOrCreateMediaObject(mediaData.filehash);
+
+        const mediaType = window.Store.MediaTypes.msgToMediaType({
+            type: mediaData.type,
+            isGif: mediaData.isGif
+        });
+
+        if (forceVoice && mediaData.type === 'audio') {
+            mediaData.type = 'ptt';
+        }
+
+        if (forceGif && mediaData.type === 'video') {
+            mediaData.isGif = true;
+        }
+
+        if (forceDocument) {
+            mediaData.type = 'document';
+        }
+
+        if (!(mediaData.mediaBlob instanceof window.Store.OpaqueData)) {
+            mediaData.mediaBlob = await window.Store.OpaqueData.createFromData(mediaData.mediaBlob, mediaData.mediaBlob.type);
+        }
+
+        mediaData.renderableUrl = mediaData.mediaBlob.url();
+        mediaObject.consolidate(mediaData.toJSON());
+        mediaData.mediaBlob.autorelease();
+
+        const uploadedMedia = await window.Store.MediaUpload.uploadMedia({
+            mimetype: mediaData.mimetype,
+            mediaObject,
+            mediaType
+        });
+
+        const mediaEntry = uploadedMedia.mediaEntry;
+        if (!mediaEntry) {
+            throw new Error('upload failed: media entry was not created');
+        }
+
+        mediaData.set({
+            clientUrl: mediaEntry.mmsUrl,
+            deprecatedMms3Url: mediaEntry.deprecatedMms3Url,
+            directPath: mediaEntry.directPath,
+            mediaKey: mediaEntry.mediaKey,
+            mediaKeyTimestamp: mediaEntry.mediaKeyTimestamp,
+            filehash: mediaObject.filehash,
+            encFilehash: mediaEntry.encFilehash,
+            uploadhash: mediaEntry.uploadHash,
+            size: mediaObject.size,
+            streamingSidecar: mediaEntry.sidecar,
+            firstFrameSidecar: mediaEntry.firstFrameSidecar
+        });
+
+        return mediaData;
+    };
+    window.WWebJS.getMessageModel = message => {
+        const msg = message.serialize();
+
+        msg.isEphemeral = message.isEphemeral;
+        msg.isStatusV3 = message.isStatusV3;
+        msg.links = (message.getLinks()).map(link => ({
+            link: link.href,
+            isSuspicious: Boolean(link.suspiciousCharacters && link.suspiciousCharacters.size)
+        }));
+
+        if (msg.buttons) {
+            msg.buttons = msg.buttons.serialize();
+        }
+        if (msg.dynamicReplyButtons) {
+            msg.dynamicReplyButtons = JSON.parse(JSON.stringify(msg.dynamicReplyButtons));
+        }
+        if (msg.replyButtons) {
+            msg.replyButtons = JSON.parse(JSON.stringify(msg.replyButtons));
+        }
+
+        if (typeof msg.id.remote === 'object') {
+            msg.id = Object.assign({}, msg.id, { remote: msg.id.remote._serialized });
+        }
+
+        delete msg.pendingAckUpdate;
+
+        return msg;
+    };
+    window.WWebJS.getChatModel = async chat => {
+
+        let res = chat.serialize();
+        res.isGroup = chat.isGroup;
+        res.formattedTitle = chat.formattedTitle;
+        res.isMuted = chat.mute && chat.mute.isMuted;
+
+        if (chat.groupMetadata) {
+            const chatWid = window.Store.WidFactory.createWid((chat.id._serialized));
+            await window.Store.GroupMetadata.update(chatWid);
+            res.groupMetadata = chat.groupMetadata.serialize();
+        }
+
+        delete res.msgs;
+        delete res.msgUnsyncedButtonReplyMsgs;
+        delete res.unsyncedButtonReplies;
+
+        return res;
+    };
+    window.WWebJS.getChat = async chatId => {
+        const chatWid = window.Store.WidFactory.createWid(chatId);
+        const chat = await window.Store.Chat.find(chatWid);
+        return await window.WWebJS.getChatModel(chat);
+    };
+    window.WWebJS.getChats = async() => {
+        const chats = window.Store.Chat.getModelsArray();
+
+        const chatPromises = chats.map(chat => window.WWebJS.getChatModel(chat));
+        return await Promise.all(chatPromises);
+    };
+    window.WWebJS.getContactModel = contact => {
+        let res = contact.serialize();
+        res.isBusiness = contact.isBusiness;
+
+        if (contact.businessProfile) {
+            res.businessProfile = contact.businessProfile.serialize();
+        }
+
+        res.isMe = contact.isMe;
+        res.isUser = contact.isUser;
+        res.isGroup = contact.isGroup;
+        res.isWAContact = contact.isWAContact;
+        res.isMyContact = contact.isMyContact;
+        res.isBlocked = contact.isContactBlocked;
+        res.userid = contact.userid;
+
+        return res;
+    };
+    window.WWebJS.getContact = async contactId => {
+        const wid = window.Store.WidFactory.createWid(contactId);
+        const contact = await window.Store.Contact.find(wid);
+        return window.WWebJS.getContactModel(contact);
+    };
+    window.WWebJS.getContacts = () => {
+        const contacts = window.Store.Contact.getModelsArray();
+        return contacts.map(contact => window.WWebJS.getContactModel(contact));
+    };
+    window.WWebJS.mediaInfoToFile = ({ data, mimetype, filename }) => {
+        const binaryData = window.atob(data);
+
+        const buffer = new ArrayBuffer(binaryData.length);
+        const view = new Uint8Array(buffer);
+        for (let i = 0; i < binaryData.length; i++) {
+            view[i] = binaryData.charCodeAt(i);
+        }
+
+        const blob = new Blob([buffer], { type: mimetype });
+        return new File([blob], filename, {
+            type: mimetype,
+            lastModified: Date.now()
+        });
+    };
+    window.WWebJS.arrayBufferToBase64 = (arrayBuffer) => {
+        let binary = '';
+        const bytes = new Uint8Array(arrayBuffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    };
+    window.WWebJS.getFileHash = async(data) => {
+        let buffer = await data.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+        return btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+    };
+    window.WWebJS.generateHash = async(length) => {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    };
+    window.WWebJS.sendClearChat = async(chatId) => {
+        let chat = window.Store.Chat.get(chatId);
+        if (chat !== undefined) {
+            await window.Store.SendClear.sendClear(chat, false);
+            return true;
+        }
+        return false;
+    };
+    window.WWebJS.sendDeleteChat = async(chatId) => {
+        let chat = window.Store.Chat.get(chatId);
+        if (chat !== undefined) {
+            await window.Store.SendDelete.sendDelete(chat);
+            return true;
+        }
+        return false;
+    };
+    window.WWebJS.sendChatstate = async(state, chatId) => {
+        if (window.Store.MDBackend) {
+            chatId = window.Store.WidFactory.createWid(chatId);
+        }
+        switch (state) {
+            case 'typing':
+                await window.Store.ChatState.sendChatStateComposing(chatId);
+                break;
+            case 'recording':
+                await window.Store.ChatState.sendChatStateRecording(chatId);
+                break;
+            case 'stop':
+                await window.Store.ChatState.sendChatStatePaused(chatId);
+                break;
+            default:
+                throw 'Invalid chatstate';
+        }
+
+        return true;
+    };
+    window.WWebJS.getLabelModel = label => {
+        let res = label.serialize();
+        res.hexColor = label.hexColor;
+
+        return res;
+    };
+    window.WWebJS.getLabels = () => {
+        const labels = window.Store.Label.getModelsArray();
+        return labels.map(label => window.WWebJS.getLabelModel(label));
+    };
+    window.WWebJS.getLabel = (labelId) => {
+        const label = window.Store.Label.get(labelId);
+        return window.WWebJS.getLabelModel(label);
+    };
+    window.WWebJS.getChatLabels = async(chatId) => {
+        const chat = await window.WWebJS.getChat(chatId);
+        return (chat.labels || []).map(id => window.WWebJS.getLabel(id));
+    };
+    window.WWebJS.getOrderDetail = async(orderId, token, chatId) => {
+        const chatWid = window.Store.WidFactory.createWid(chatId);
+        return window.Store.QueryOrder.queryOrder(chatWid, orderId, 80, 80, token);
+    };
+    window.WWebJS.getProductMetadata = async(productId) => {
+        let sellerId = window.Store.Conn.wid;
+        let product = await window.Store.QueryProduct.queryProduct(sellerId, productId);
+        if (product && product.data) {
+            return product.data;
+        }
+
+        return undefined;
+    };
+}
+
+//  *************** wapi.js **************
+
+function wapi_js_client() {
+    window.WAPI = {
+        lastRead: {}
+    };
+    window.WAPI._serializeRawObj = (obj) => {
+        if (obj) {
+            return obj.toJSON();
+        }
+        return {}
+    };
+    window.WAPI._serializeChatObj = (obj) => {
+        if (obj === undefined) {
+            return null;
+        }
+
+        return Object.assign(window.WAPI._serializeRawObj(obj), {
+            kind: obj.kind,
+            isGroup: obj.isGroup,
+            contact: obj['contact'] ? window.WAPI._serializeContactObj(obj['contact']) : null,
+            groupMetadata: obj["groupMetadata"] ? window.WAPI._serializeRawObj(obj["groupMetadata"]) : null,
+            presence: obj["presence"] ? window.WAPI._serializeRawObj(obj["presence"]) : null,
+            msgs: null
+        });
+    };
+    window.WAPI._serializeContactObj = (obj) => {
+        if (obj === undefined) {
+            return null;
+        }
+
+        return Object.assign(window.WAPI._serializeRawObj(obj), {
+            formattedName: obj.formattedName,
+            isHighLevelVerified: obj.isHighLevelVerified,
+            isMe: obj.isMe,
+            isMyContact: obj.isMyContact,
+            isPSA: obj.isPSA,
+            isUser: obj.isUser,
+            isVerified: obj.isVerified,
+            isWAContact: obj.isWAContact,
+            profilePicThumbObj: obj.profilePicThumb ? WAPI._serializeProfilePicThumb(obj.profilePicThumb) : {},
+            statusMute: obj.statusMute,
+            msgs: null
+        });
+    };
+    window.WAPI._serializeMessageObj = obj => {
+        if (obj == undefined) {
+            return null;
+        }
+        const _chat = obj["chat"] ? WAPI._serializeChatObj(obj["chat"]) : {};
+        if (obj.quotedMsg) obj.quotedMsgObj();
+        return Object.assign(window.WAPI._serializeRawObj(obj), {
+            id: obj.id._serialized,
+            //add 02/06/2020 mike -->
+            quotedParticipant: obj.quotedParticipant ?
+                obj.quotedParticipant._serialized ?
+                obj.quotedParticipant._serialized :
+                undefined : undefined,
+            author: obj.author ?
+                obj.author._serialized ?
+                obj.author._serialized :
+                undefined : undefined,
+            chatId: obj.chatId ?
+                obj.chatId._serialized ?
+                obj.chatId._serialized :
+                undefined : undefined,
+            to: obj.to ?
+                obj.to._serialized ?
+                obj.to._serialized :
+                undefined : undefined,
+            fromMe: obj.id.fromMe,
+            //add 02/06/2020 mike <--
+
+            sender: obj["senderObj"] ?
+                WAPI._serializeContactObj(obj["senderObj"]) : null,
+            timestamp: obj["t"],
+            content: obj["body"],
+            isGroupMsg: obj.isGroupMsg,
+            isLink: obj.isLink,
+            isMMS: obj.isMMS,
+            isMedia: obj.isMedia,
+            isNotification: obj.isNotification,
+            isPSA: obj.isPSA,
+            type: obj.type,
+            chat: _chat,
+            isOnline: _chat.isOnline,
+            lastSeen: _chat.lastSeen,
+            chatId: obj.id.remote,
+            quotedMsgObj: WAPI._serializeMessageObj(obj["_quotedMsgObj"]),
+            mediaData: window.WAPI._serializeRawObj(obj["mediaData"]),
+            reply: body => window.WAPI.reply(_chat.id._serialized, body, obj)
+        });
+    };
+    window.WAPI._serializeNumberStatusObj = (obj) => {
+        if (obj === undefined) {
+            return null;
+        }
+
+        return Object.assign({}, {
+            id: obj.jid,
+            status: obj.status,
+            isBusiness: (obj.biz === true),
+            canReceiveMessage: (obj.status === 200)
+        });
+    };
+    window.WAPI._serializeProfilePicThumb = (obj) => {
+        if (obj === undefined) {
+            return null;
+        }
+
+        return Object.assign({}, {
+            eurl: obj.eurl,
+            id: obj.id,
+            img: obj.img,
+            imgFull: obj.imgFull,
+            raw: obj.raw,
+            tag: obj.tag
+        });
+    }
+    window.WAPI.isMultiDeviceVersion = function() {
+        try {
+            var resp = !!Store.GetMaybeMeUser.getMe().device;
+            return resp;
+        } catch (_) {
+            return false;
+        }
+    }
+    window.WAPI.getChat = function(id, done) {
+        // New version WhatsApp Beta Multi Device
+        if (WAPI.isMultiDeviceVersion()) {
+            let chat = window.Store.Chat.get(id);
+            if (chat) {
+                if (chat.sendMessage) {
+                    if (done) done(chat);
+                    return chat;
+                } else {
+                    if (done) done(chat._value);
+                    return chat._value;
+                }
+            } else {
+                // Create user
+                var idx = new window.Store.UserConstructor(id, { intentionallyUsePrivateConstructor: true });
+
+                // Get chat
+                // window.Store.Chat.find(idx, chat => {
+
+                //   if (chat._value) {
+                //     if (done) done(chat._value);
+                //   } else {
+                //     if (done) done(chat);
+                //   }
+                // });
+
+                window.Store.FindChat.findChat(idx).then(chat => {
+                    if (done) done(chat);
+                }).catch(e => {
+                    if (done) done(null);
+                })
+
+                return undefined;
+            }
+        } else
+        // Old version
+        {
+            id = typeof id == "string" ? id : id._serialized;
+            const found = window.Store.Chat.get(id);
+            found.sendMessage = (found.sendMessage) ? found.sendMessage : function() { return window.Store.sendMessage.apply(this, arguments); };
+            if (done !== undefined) done(found);
+            return found;
+        }
+    }
+    window.WAPI.base64ImageToFile = function(b64Data, filename) {
+        var arr = b64Data.split(',');
+        var mime = arr[0].match(/:(.*?);/)[1];
+        var bstr = atob(arr[1]);
+        var n = bstr.length;
+        var u8arr = new Uint8Array(n);
+
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, { type: mime });
+    };
+    window.WAPI.sendSeen = async(chatId) => {
+        let chat = window.Store.Chat.get(chatId);
+        if (chat !== undefined) {
+            await window.Store.SendSeen.sendSeen(chat, false);
+            return true;
+        }
+        return false;
+
+    };
+    window.WAPI.getFileHash = async(data) => {
+        let buffer = await data.arrayBuffer();
+        var sha = new jsSHA("SHA-256", "ARRAYBUFFER");
+        sha.update(buffer);
+        return sha.getHash("B64");
+    };
+    window.WAPI.generateMediaKey = async(length) => {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    };
+
+    /** Joins a group via the invite link, code, or message
+     * @param link This param is the string which includes the invite link or code. The following work:
+     * - Follow this link to join my WA group: https://chat.whatsapp.com/DHTGJUfFJAV9MxOpZO1fBZ
+     * - https://chat.whatsapp.com/DHTGJUfFJAV9MxOpZO1fBZ
+     * - DHTGJUfFJAV9MxOpZO1fBZ
+     * @returns Promise<string | boolean> Either false if it didn't work, or the group id.
+     */
+    window.WAPI.joinGroupViaLink = async function(link) {
+            return await Store.WapQuery.acceptGroupInvite(link.split('\/').pop()).then(res => res.status === 200 ? res.gid._serialized : res.status);
+            let code = link;
+            //is it a link? if not, assume it's a code, otherwise, process the link to get the code.
+            if (link.includes('chat.whatsapp.com')) {
+                if (!link.match(/chat.whatsapp.com\/([\w\d]*)/g).length) return false;
+                code = link.match(/chat.whatsapp.com\/([\w\d]*)/g)[0].replace('chat.whatsapp.com\/', '');
+            }
+            const group = await Store.GroupInvite.joinGroupViaInvite(code);
+            if (!group.id) return false;
+            return group.id._serialized
+        }
+        /**
+         * @param id The id of the conversation
+         * @param archive boolean true => archive, false => unarchive
+         * @return boolean true: worked, false: didnt work (probably already in desired state)
+         */
+    window.WAPI.archiveChat = async function(id, archive) {
+        return await Store.Archive.setArchive(Store.Chat.get(id), archive).then(_ => true).catch(_ => false)
+    }
+
+    /**
+     * Create an chat ID based in a cloned one
+     *
+     * @param {string} chatId '000000000000@c.us'
+     */
+    window.WAPI.getNewMessageId = function(chatId) {
+        var newMsgId = Store.Msg.models[0].__x_id.clone();
+
+        newMsgId.fromMe = true;
+        newMsgId.id = WAPI.getNewId().toUpperCase();
+        newMsgId.remote = chatId;
+        newMsgId._serialized = `${newMsgId.fromMe}_${newMsgId.remote}_${newMsgId.id}`
+
+        return newMsgId;
+    };
+
+}
+
+
+
+function custom_clint() {
+    window.WAPI.checkNumberStatus_V2 = async function(chatId, done) {
+        let data
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+            }
+            const wid = window.Store.WidFactory.createWid(chatId);
+            const result = await window.Store.QueryExist(wid);
+            // console.log(result);
+            if (!result || result.wid === undefined) data = { result: null, error: 'not found' };
+            data = { result: result.wid, error: null };
+        } catch (e) {
+            // console.log(e.message)
+            data = { result: null, error: e.message }
+        }
+        if (done) done(data);
+        return data
+    };
+
+    window.WAPI.checkNumberStatus_V3 = async function(chatId, done) {
+        let data
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += '@c.us'
+            }
+
+            const result = await WPP.contact.queryExists(chatId)
+
+            if (!result || result.wid === undefined) data = { result: null, error: 'not found' };
+            data = { result: result.wid, error: null };
+        } catch (e) {
+            // console.log(e.message)
+            data = { result: null, error: e.message }
+        }
+        if (done) done(data);
+        return data
+    };
+
+    window.WAPI.getLoadMessagesChat_V2 = async function(id, more = false, includeMe = true, done) {
+        let data
+        let msgs;
+        let output = [];
+        let isNext = false;
+        try {
+            if (id && (!id.endsWith('@c.us') || !id.endsWith('@g.us'))) {
+                id += id.length > 15 ? '@g.us' : '@c.us'
+            }
+            const chat = window.WAPI.getChat(id);
+            isNext = !chat.msgs.msgLoadState.noEarlierMsgs
+            if (more) {
+                msgs = await window.Store.ConversationMsgs.loadEarlierMsgs(chat);
+            } else {
+                msgs = chat.msgs.getModelsArray()
+            }
+            if (msgs) {
+                for (const m of msgs) {
+                    output.push(window.WAPI._serializeMessageObj(m))
+                }
+            }
+
+            data = { result: output, isNext: isNext, error: null };
+        } catch (e) {
+            data = { result: output, error: e.message, isNext: isNext }
+        }
+        if (done) done(data);
+        return data
+    };
+    window.WAPI.stopAutoReplay_V2 = function(done) {
+        window.Store.Msg._events.add = []
+        if (done) done();
+    }
+    window.WAPI.startAutoReplay_V2 = function(done) {
+        window.Store.Msg.on('add', async(msg) => {
+            if (msg && msg.isNewMsg && !msg.isSentByMe) {
+                //for read state
+                if (msg.ack && msg.ack > 2) {} else if (msg.isGroupMsg) {}
+                // else if (msg.isMedia) {}
+                // else if (msg.type && msg.type !== "chat") {} else if (!msg.body) {}
+                else {
+                    let messages = []
+                    let replays = JSON.parse(localStorage.getItem("replays"));
+                    Object.keys(replays).map(function(key, index) {
+                        key.split(',').map((k) => {
+                            if (msg.body.includes(k.replace(/\s/g, ''))) {
+                                messages.push(replays[key])
+                            }
+                        })
+                    });
+                    try {
+                        await window.WAPI.sendSeen(msg.sender._serialized);
+                    } catch (e) {
+                        console.log(e.message)
+                    }
+                    messages = [...new Set(messages)];
+                    for (const message of messages) {
+                        if ("text" === message.message_type || ("button" === message.message_type && !message.media)) {
+                            console.log(await window.WAPI.sendButtonsWithText_V2(msg.sender._serialized, message))
+                        } else if (("button" === message.message_type && message.media) || "file" === message.message_type) {
+                            console.log(await window.WAPI.sendButtonsWithFile_V2(msg.sender._serialized, message))
+                        } else if ("list" === message.message_type) {
+                            console.log(await window.WAPI.sendList_V2(msg.sender._serialized, message))
+                        }
+                    }
+                }
+            }
+        })
+        if (done) done();
+    }
+    window.WAPI.updateReplay_V2 = function(replays = {}, done) {
+        localStorage.setItem("replays", JSON.stringify(replays));
+        if (done) done();
+    }
+    window.WAPI.sendMessage_V4 = async function sendFileInput(chatId, caption, options = {}, done) {
+        let data;
+        let media;
+        if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+            chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+        }
+        try {
+
+            const chat = window.WAPI.getChat(chatId);
+            if (chat) {
+                if (options.media && options.filename) {
+                    const forceDocument = options.sendMediaAsDocument || false
+                    const mediaBlob = window.WAPI.base64ImageToFile(options.media, options.filename);
+                    const mData = await window.Store.OpaqueData.createFromData(mediaBlob, mediaBlob.type);
+                    const media = window.Store.MediaPrep.prepRawMedia(mData, { asDocument: forceDocument });
+                    const result = await media.sendToChat(chat, { caption: caption })
+
+                    data = { 'result': result !== 'ERROR_UNKNOWN' ? result : null, error: result === 'ERROR_UNKNOWN' ? result : null };
+                } else {
+                    const result = await window.Store.SendTextMsgToChat(chat, caption)
+                    data = { 'result': result };
+                }
+            } else {
+                data = { 'error': "Chat NOT FOUND" };
+            }
+
+        } catch (e) {
+            data = { 'error': e.message };
+        }
+
+        if (done) done(data);
+        return data
+
+    }
+    window.WAPI.openChat_V2 = async function(chatId, done) {
+        let data;
+        if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+            chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+        }
+
+        const chat = window.WAPI.getChat(chatId)
+        if (chat) {
+            try {
+                const res = await window.Store.Cmd.openChatAt(chat)
+                data = { result: res }
+            } catch (e) {
+                data = { error: e.message }
+            }
+        } else {
+            data = { error: "Chat NOT FOUND" }
+        }
+
+        if (done) done(data);
+        return data
+
+    }
+    window.WAPI.closeChat_v2 = function(done) {
+        window.Store.Cmd.closeChat(window.Store.Chat.getActive())
+        if (done) done();
+    }
+    window.WAPI.chatInfoDrawer_v2 = function(done) {
+            window.Store.Cmd.chatInfoDrawer(window.Store.Chat.getActive())
+            if (done) done();
+        }
+        /**
+         * buttons max 3 text and 2 link or phoneNumber
+         * @param chatId
+         * @param option
+         * @param done
+         * @returns {Promise<{error: string}|{result: boolean}>}
+         */
+    window.WAPI.sendTest_V2 = async function(chatId, option, done) {
+        let data;
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+            }
+
+            let text = "text?text:''"
+            const chat = window.WAPI.getChat(chatId);
+            if (chat && 404 != chat.status && chat.id) {
+                const meUser = window.Store.User.getMaybeMeUser();
+                const isMD = window.Store.MDBackend;
+
+                const newMsgId = new window.Store.MsgKey({
+                    from: meUser,
+                    to: chat.id,
+                    id: window.Store.MsgKey.newId(),
+                    participant: isMD && chat.id.isGroup() ? meUser : undefined,
+                    selfDir: 'out',
+                });
+
+                let s = {
+                    id: newMsgId,
+                    ack: 1,
+                    from: meUser,
+                    to: chat.id,
+                    local: true,
+                    self: "out",
+                    t: parseInt((new Date).getTime() / 1e3),
+                    isNewMsg: true,
+                    type: "chat",
+                    body: text,
+                    caption: text,
+                    content: text,
+                    isForwarded: false,
+                    broadcast: false,
+                };
+                let r = (await Promise.all(window.Store.addAndSendMsgToChat(chat, s)));
+                data = { result: "success" === r[1] || "OK" === r[1] }
+
+            } else {
+                data = { error: "Chat NOT FOUND" }
+            }
+        } catch (e) {
+            data = { error: e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+
+    window.WAPI.sendButtons_V2 = async function(chatId, option, done) {
+        let data;
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+            }
+
+            const buttons = option.buttons
+            const title = option.title
+            const footer = option.footer
+            let text = option.message
+            text = text ? text : ''
+            const chat = window.WAPI.getChat(chatId);
+            if (chat && 404 != chat.status && chat.id) {
+                const meUser = window.Store.User.getMaybeMeUser();
+                const isMD = window.Store.MDBackend;
+
+                const newMsgId = new window.Store.MsgKey({
+                    from: meUser,
+                    to: chat.id,
+                    id: window.Store.MsgKey.newId(),
+                    participant: isMD && chat.id.isGroup() ? meUser : undefined,
+                    selfDir: 'out',
+                });
+
+                // const e = await window.WAPI.getNewMessageId(chat.id._serialized),
+                let s = {
+                    id: newMsgId,
+                    ack: 1,
+                    from: meUser,
+                    to: chat.id,
+                    local: true,
+                    self: "out",
+                    t: parseInt((new Date).getTime() / 1e3),
+                    isNewMsg: true,
+                    type: "chat",
+                    body: text,
+                    caption: text,
+                    content: text,
+                    isForwarded: false,
+                    broadcast: false,
+                    isQuotedMsgAvailable: false,
+                    shouldEnableHsm: true,
+                    __x_hasTemplateButtons: true,
+                    invis: true,
+                };
+                let a = await WPP.chat.prepareMessageButtons({
+                    "phone": new Store.WidFactory.createWid(chat.id),
+                    "message": text,
+                    "options": {
+                        "useTemplateButtons": true,
+                        "buttons": buttons,
+                    }
+                }, {
+                    "useTemplateButtons": true,
+                    "buttons": buttons,
+                    "title": title,
+                    "footer": footer,
+                });
+                Object.assign(s, a);
+                let r = (await Promise.all(window.Store.addAndSendMsgToChat(chat, s)));
+                data = { result: "success" === r[1] || "OK" === r[1] }
+
+            } else {
+                data = { error: "Chat NOT FOUND" }
+            }
+        } catch (e) {
+            data = { error: e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+    window.WAPI.sendButtonsWithFile_V2 = async function(chatId, options, done) {
+        let data;
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+            }
+            let isButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+            let useTemplateButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+            if (options.useTemplateButton == "false") {
+                useTemplateButton = false
+            }
+            console.log(useTemplateButton)
+            let s = {
+                createChat: true,
+                useTemplateButtons: useTemplateButton,
+                type: options.type,
+                footer: options.footer,
+                caption: options.message || '',
+            }
+            if (isButton) {
+                s['buttons'] = options.buttons
+            }
+
+            const a = await WPP.chat.sendFileMessage(
+                chatId,
+                options.media, s
+            );
+            data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+
+        } catch (e) {
+            data = { error: e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+    window.WAPI.sendButtonsWithText_V2 = async function(chatId, options, done) {
+        let data = {};
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+            }
+            let isButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+            let useTemplateButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+            if (options.useTemplateButton == "false") {
+                useTemplateButton = false
+            }
+            console.log(useTemplateButton)
+            let s = {
+                createChat: true,
+                useTemplateButtons: useTemplateButton,
+                footer: options.footer,
+                title: options.title,
+            }
+
+            if (isButton) {
+                s['buttons'] = options.buttons
+            }
+
+            const a = await WPP.chat.sendTextMessage(
+                chatId,
+                options.message, s
+            );
+            data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+        } catch (e) {
+            console.log(e)
+            data = { error: e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+
+    /**
+     * @param chatId
+     * @param option
+     * Sections options must have between 1 and 10 options
+     * @param done
+     * @returns {Promise<{error: string}|{result: boolean}>}
+     */
+    window.WAPI.sendList_V2 = async function(chatId, option, done) {
+        let data
+        try {
+            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+            }
+            const buttonText = option.buttonText || "ارسل"
+            const description = option.description || option.message
+            const section = option.sections
+            const title = option.title
+            const footer = option.footer
+
+            const chat = window.WAPI.getChat(chatId);
+            if (chat && 404 != chat.status && chat.id) {
+                let n = {
+                    "buttonText": buttonText,
+                    "description": description,
+                    "sections": section,
+                    "title": title,
+                    "footer": footer,
+                }
+                const a = await WPP.chat.sendListMessage(chat.id, n);
+
+                data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+            } else {
+                data = { error: "Chat NOT FOUND" }
+            }
+        } catch (e) {
+            console.log(e)
+            data = { error: e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+
+    window.WAPI.getChats_V2 = async function(options = {}, done) {
+        let data;
+        let option = {};
+        if (options instanceof Object) {
+            option.onlyUsers = options.onlyUsers
+            option.onlyGroups = options.onlyGroups
+            option.withLabels = options.withLabels
+        }
+        data = await WPP.chat.list(option)
+        data = data.map((e) => {
+            return {
+                id: e.id.user,
+                // name:e.__x_formattedTitle,
+                isGroup: e.isGroup,
+                isMyContact: e.__x_contact.isMyContact,
+                __x_displayName: e.__x_contact.__x_displayName
+            }
+        });
+        if (done) done(data);
+        return data
+    }
+
+    window.WAPI.getGroupParticipants_V2 = function(id, done) {
+        let data;
+        if (id && (!id.endsWith('@g.us'))) {
+            id += '@g.us'
+        }
+        let metadata = window.Store.GroupMetadata.get(id);
+        if (metadata) {
+            data = metadata.participants.map((e) => {
+                return {
+                    id: e.id.user,
+                    // name:e.__x_formattedTitle,
+                    isGroup: e.isGroup,
+                    isMyContact: e.__x_contact.isMyContact,
+                    __x_displayName: e.__x_contact.__x_displayName
+                }
+            });
+        }
+        if (done) done(data);
+        return data
+    };
+
+    window.WAPI.getGroupInfoFromInviteCode_V2 = async function(inviteCode, done) {
+        let data = {}
+        if (inviteCode && inviteCode !== "") {
+            try {
+                data = await WPP.group.getGroupInfoFromInviteCode(inviteCode);
+            } catch (e) {
+                data = { "error": e.message }
+            }
+        } else {
+            data = { "error": "Invalid Invite Code" }
+        }
+        if (done) done(data);
+        return data
+    }
+
+    window.WAPI.joinGroupFromInviteCode_V2 = async function(inviteCode, done) {
+        let data = {}
+        if (inviteCode && inviteCode !== "") {
+            try {
+                data = await WPP.group.join(inviteCode);
+            } catch (e) {
+                data = { "error": e.message }
+            }
+        } else {
+            data = { "error": "Invalid Invite Code" }
+        }
+        if (done) done(data);
+        return data
+    }
+
+    window.WAPI.canAddToGroup_V2 = async function(id, done) {
+        let data = {}
+        if (id && (!id.endsWith('@g.us'))) {
+            id += '@g.us'
+        }
+
+        try {
+            let r = await WPP.group.canAdd(id);
+            data = { "result": r }
+        } catch (e) {
+            data = { "error": e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+    window.WAPI.addToGroup_V2 = async function(idGroup, ids, done) {
+        let data = {}
+        if (idGroup && (!idGroup.endsWith('@g.us'))) {
+            idGroup += '@g.us'
+        }
+
+        try {
+            let r = await WPP.group.addParticipants(idGroup, ids);
+            data = { "result": r }
+        } catch (e) {
+            data = { "error": e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+    window.WAPI.createGroup_V2 = async function(name, done) {
+        let data = {}
+        try {
+            let r = await WPP.group.create(name, []);
+            data = { "result": r }
+        } catch (e) {
+            data = { "error": e.message }
+        }
+
+        if (done) done(data);
+        return data
+    }
+
+    window.WAPI.getAllContacts_V2 = async function(option, done) {
+        let data;
+        option = option instanceof Object ? option : {}
+        data = await WPP.contact.list(option)
+        data = data.map((e) => {
+
+            return {
+                id: e.id.user,
+                name: e.__x_formattedTitle,
+                isGroup: e.isGroup,
+                isMyContact: e.isMyContact,
+                __x_displayName: e.__x_displayName,
+                __x_contact: e.__x_contact.__x_displayName,
+                __x_notifyName: e.__x_contact.__x_notifyName,
+            }
+        });
+        if (done) done(data);
+        return data
+    }
+    window.WAPI.getLabels_V2 = (done) => {
+        const labels = window.Store.Label.getModelsArray();
+        let data = labels.map(label => label.serialize());
+        if (done) done(data);
+        return data
+    };
+
+
+}
+
+wapi_js_client()
+custom_clint()
