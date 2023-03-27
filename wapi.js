@@ -996,7 +996,10 @@ function custom_clint() {
         }
         try {
 
-            const chat = window.WAPI.getChat(chatId);
+            let chat = window.WAPI.getChat(chatId);
+            if (!chat){
+            let chat = window.WAPI.getChat(chatId);
+            }
             if (chat) {
                 if (options.media && options.filename) {
                     const forceDocument = options.sendMediaAsDocument || false
@@ -1013,6 +1016,37 @@ function custom_clint() {
             } else {
                 data = { 'error': "Chat NOT FOUND" };
             }
+
+        } catch (e) {
+            data = { 'error': e.message };
+        }
+
+        if (done) done(data);
+        return data
+
+    }
+        window.WAPI.sendMessage_V5 = async function (chatId, caption, options = {}, done) {
+        let data;
+        let media;
+        if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+            chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+        }
+        try {
+
+                if (options.media) {
+                    const forceDocument = options.sendMediaAsDocument || false
+                    const a = await WPP.chat.sendFileMessage(chatId, options.media, {
+                            caption:caption,
+                            type: "auto-detect",
+                            filename:options.filename
+                            })
+                    data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                } else {
+                    const a = await WPP.chat.sendTextMessage(chatId, caption, {
+                      createChat: true
+                    });
+                    data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                }
 
         } catch (e) {
             data = { 'error': e.message };
