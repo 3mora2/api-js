@@ -1028,7 +1028,40 @@ function custom_clint() {
         return data
 
     }
-    window.WAPI.sendMessage_V5 = window.WAPI.sendMessage_V4
+    window.WAPI.sendMessage_V5 = async function (chatId, caption, options = {}, done) {
+        let data;
+        let media;
+        if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+            chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+        }
+        try {
+                try{
+                    await WPP.chat.openChatBottom(chatId);
+                }catch(e){
+                }
+                if (options.media) {
+                    const forceDocument = options.sendMediaAsDocument || false
+                    const a = await WPP.chat.sendFileMessage(chatId, options.media, {
+                            caption:caption,
+                            type: "auto-detect",
+                            filename:options.filename
+                            })
+                    data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                } else {
+                    const a = await WPP.chat.sendTextMessage(chatId, caption, {
+                      createChat: true
+                    });
+                    data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                }
+
+        } catch (e) {
+            data = { 'error': e.message };
+        }
+
+        if (done) done(data);
+        return data
+
+    }
     window.WAPI.openChat_V2 = async function(chatId, done) {
         let data;
         if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
