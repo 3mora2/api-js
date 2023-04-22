@@ -1043,7 +1043,7 @@ function custom_clint() {
                             })
                     data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
                 } else {
-                    const a = WPP.chat.sendTextMessage(chatId, caption, {
+                    const a = await WPP.chat.sendTextMessage(chatId, caption, {
                       createChat: true
                     });
                     data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
