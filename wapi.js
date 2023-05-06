@@ -1041,14 +1041,15 @@ function custom_clint() {
                             caption:caption,
                             type: "auto-detect"
                             })
-                    // data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                    data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
                 } else {
                     const a = await WPP.chat.sendTextMessage(chatId, caption, {
                       createChat: true
                     });
+                    data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
 
                 }
-                data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+
 
         } catch (e) {
             data = { 'error': e.message };
