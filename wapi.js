@@ -1041,13 +1041,14 @@ function custom_clint() {
                             caption:caption,
                             type: "auto-detect"
                             })
-                    data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                    // data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
                 } else {
                     const a = await WPP.chat.sendTextMessage(chatId, caption, {
                       createChat: true
                     });
-                    data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+
                 }
+                data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
 
         } catch (e) {
             data = { 'error': e.message };
@@ -1245,7 +1246,7 @@ function custom_clint() {
                 chatId,
                 options.media, s
             );
-            data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
 
         } catch (e) {
             data = { error: e.message }
@@ -1281,7 +1282,7 @@ function custom_clint() {
                 chatId,
                 options.message, s
             );
-            data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
         } catch (e) {
             console.log(e)
             data = { error: e.message }
@@ -1321,7 +1322,7 @@ function custom_clint() {
                 }
                 const a = await WPP.chat.sendListMessage(chat.id, n);
 
-                data = { result: "success" === a.sendMsgResult._value || "OK" === a.sendMsgResult._value }
+                data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
             } else {
                 data = { error: "Chat NOT FOUND" }
             }
