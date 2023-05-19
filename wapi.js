@@ -949,13 +949,18 @@ function custom_clint() {
     }
     window.WAPI.startAutoReplay_V2 = function(done) {
         window.Store.Msg.on('add', async(msg) => {
-            let chatId = msg.from._serialized
-            console.log(chatId)
+
+            let chatId = msg.from._serialized || msg.from
+
             if (msg && msg.isNewMsg && !msg.isSentByMe) {
                 //for read state
                 if (msg.ack && msg.ack > 2) {} else if (msg.isGroupMsg) {}
                 // else if (msg.isMedia) {}
-                // else if (msg.type && msg.type !== "chat") {} else if (!msg.body) {}
+                // else if (msg.type && msg.type !== "chat") {}
+                else if (!msg.body) {
+                    console.log("no body")
+//                    console.log(msg)
+                }
                 else {
                     let messages = []
                     let replays = JSON.parse(localStorage.getItem("replays"));
@@ -973,11 +978,13 @@ function custom_clint() {
                     }
                     messages = [...new Set(messages)];
                     for (const message of messages) {
+//                        console.log(chatId)
                         if ("text" === message.message_type || ("button" === message.message_type && !message.media)) {
                             console.log(await window.WAPI.sendButtonsWithText_V2(chatId, message))
                         } else if (("button" === message.message_type && message.media) || "file" === message.message_type) {
                             console.log(await window.WAPI.sendButtonsWithFile_V2(chatId, message))
                         } else if ("list" === message.message_type) {
+
                             console.log(await window.WAPI.sendList_V2(chatId, message))
                         }
                     }
@@ -1220,32 +1227,17 @@ function custom_clint() {
         if (done) done(data);
         return data
     }
-    window.WAPI.sendButtonsWithFile_V2 = async function(chatId, options, done) {
+
+    window.WAPI.sendFile_V5 = async function(chatId, options, done) {
         let data;
         try {
             if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
                 chatId += chatId.length > 15 ? '@g.us' : '@c.us'
             }
-            let isButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
-            let useTemplateButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
-            if (options.useTemplateButton == "false") {
-                useTemplateButton = false
-            }
-            console.log(useTemplateButton)
-            let s = {
-                createChat: true,
-                useTemplateButtons: useTemplateButton,
-                type: options.type,
-                footer: options.footer,
-                caption: options.message || '',
-            }
-            if (isButton) {
-                s['buttons'] = options.buttons
-            }
 
             const a = await WPP.chat.sendFileMessage(
                 chatId,
-                options.media, s
+                options.media
             );
             data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
 
@@ -1256,32 +1248,54 @@ function custom_clint() {
         if (done) done(data);
         return data
     }
-    window.WAPI.sendButtonsWithText_V2 = async function(chatId, options, done) {
+    window.WAPI.sendButtonsWithFile_V2 = window.WAPI.sendFile_V5
+//    async function(chatId, options, done) {
+//        let data;
+//        try {
+//            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+//                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+//            }
+//            let isButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+//            let useTemplateButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+//            if (options.useTemplateButton == "false") {
+//                useTemplateButton = false
+//            }
+//            console.log(useTemplateButton)
+//            let s = {
+//                createChat: true,
+//                useTemplateButtons: useTemplateButton,
+//                type: options.type,
+//                footer: options.footer,
+//                caption: options.message || '',
+//            }
+//            if (isButton) {
+//                s['buttons'] = options.buttons
+//            }
+//
+//            const a = await WPP.chat.sendFileMessage(
+//                chatId,
+//                options.media, s
+//            );
+//            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+//
+//        } catch (e) {
+//            data = { error: e.message }
+//        }
+//
+//        if (done) done(data);
+//        return data
+//    }
+
+    window.WAPI.sendText_V5 = async function(chatId, options, done) {
         let data = {};
         try {
             if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
                 chatId += chatId.length > 15 ? '@g.us' : '@c.us'
             }
-            let isButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
-            let useTemplateButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
-            if (options.useTemplateButton == "false") {
-                useTemplateButton = false
-            }
-            console.log(useTemplateButton)
-            let s = {
-                createChat: true,
-                useTemplateButtons: useTemplateButton,
-                footer: options.footer,
-                title: options.title,
-            }
-
-            if (isButton) {
-                s['buttons'] = options.buttons
-            }
 
             const a = await WPP.chat.sendTextMessage(
                 chatId,
-                options.message, s
+                options.message,
             );
             data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
         } catch (e) {
@@ -1292,6 +1306,43 @@ function custom_clint() {
         if (done) done(data);
         return data
     }
+    window.WAPI.sendButtonsWithText_V2 = window.WAPI.sendText_V5
+//    async function(chatId, options, done) {
+//        let data = {};
+//        try {
+//            if (chatId && (!chatId.endsWith('@c.us') && !chatId.endsWith('@g.us'))) {
+//                chatId += chatId.length > 15 ? '@g.us' : '@c.us'
+//            }
+//            let isButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+//            let useTemplateButton = Array.isArray(options.buttons) && 5 >= options.buttons.length >= 1
+//            if (options.useTemplateButton == "false") {
+//                useTemplateButton = false
+//            }
+//            console.log(useTemplateButton)
+//            let s = {
+//                createChat: true,
+//                useTemplateButtons: useTemplateButton,
+//                footer: options.footer,
+//                title: options.title,
+//            }
+//
+//            if (isButton) {
+//                s['buttons'] = options.buttons
+//            }
+//
+//            const a = await WPP.chat.sendTextMessage(
+//                chatId,
+//                options.message, s
+//            );
+//            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+//        } catch (e) {
+//            console.log(e)
+//            data = { error: e.message }
+//        }
+//
+//        if (done) done(data);
+//        return data
+//    }
 
     /**
      * @param chatId
