@@ -1046,7 +1046,8 @@ function custom_clint() {
                     const forceDocument = options.sendMediaAsDocument || false
                     const a = await WPP.chat.sendFileMessage(chatId, options.media, {
                             caption:caption,
-                            type: "auto-detect"
+                            type: "auto-detect",
+                            createChat: true
                             })
                     data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
                 } else {
