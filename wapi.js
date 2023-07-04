@@ -1403,7 +1403,7 @@ function custom_clint() {
                 // name:e.__x_formattedTitle,
                 isGroup: e.isGroup,
                 isMyContact: e.__x_contact.isMyContact,
-                __x_displayName: e.__x_contact.__x_displayName
+                __x_displayName: e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName
             }
         });
         if (done) done(data);
