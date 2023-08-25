@@ -1049,12 +1049,12 @@ function custom_clint() {
                             type: "auto-detect",
                             createChat: true
                             })
-                    data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+                    data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
                 } else {
                     const a = await WPP.chat.sendTextMessage(chatId, caption, {
                       createChat: true
                     });
-                    data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+                    data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
 
                 }
 
@@ -1240,7 +1240,7 @@ function custom_clint() {
                 chatId,
                 options.media
             );
-            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+            data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
 
         } catch (e) {
             data = { error: e.message }
@@ -1277,7 +1277,7 @@ function custom_clint() {
 //                chatId,
 //                options.media, s
 //            );
-//            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+//            data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
 //
 //        } catch (e) {
 //            data = { error: e.message }
@@ -1298,7 +1298,7 @@ function custom_clint() {
                 chatId,
                 options.message,
             );
-            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+            data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
         } catch (e) {
             console.log(e)
             data = { error: e.message }
@@ -1335,7 +1335,7 @@ function custom_clint() {
 //                chatId,
 //                options.message, s
 //            );
-//            data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+//            data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
 //        } catch (e) {
 //            console.log(e)
 //            data = { error: e.message }
@@ -1375,7 +1375,7 @@ function custom_clint() {
                 }
                 const a = await WPP.chat.sendListMessage(chat.id, n);
 
-                data = { result: "success" === await a.sendMsgResult || "OK" === await a.sendMsgResult }
+                data = { result: "success" === (await a.sendMsgResult).messageSendResult || "OK" === (await a.sendMsgResult).messageSendResult }
             } else {
                 data = { error: "Chat NOT FOUND" }
             }
