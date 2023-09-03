@@ -1403,7 +1403,7 @@ function custom_clint() {
                 // name:e.__x_formattedTitle,
                 isGroup: e.isGroup,
                 isMyContact: e.__x_contact.isMyContact,
-                __x_displayName: e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName
+                __x_displayName: e.__x_contact.formattedName||e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName
             }
         });
         if (done) done(data);
@@ -1423,7 +1423,7 @@ function custom_clint() {
                     // name:e.__x_formattedTitle,
                     isGroup: e.isGroup,
                     isMyContact: e.__x_contact.isMyContact,
-                    __x_displayName: e.__x_contact.__x_displayName||e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName
+                    __x_displayName: e.__x_contact.formattedName||e.__x_contact.__x_displayName||e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName
                 }
             });
         }
@@ -1517,8 +1517,8 @@ function custom_clint() {
                 name: e.__x_formattedTitle,
                 isGroup: e.isGroup,
                 isMyContact: e.isMyContact,
-                __x_displayName: e.__x_displayName||e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName,
-                __x_contact: e.__x_contact.__x_displayName||e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName,
+                __x_displayName: e.__x_contact.formattedName||e.__x_displayName||e.__x_contact.__x_name||e.__x_contact.__x_verifiedName||e.__x_contact.__x_pushname,
+                __x_contact: e.__x_contact.formattedName||e.__x_contact.__x_displayName||e.__x_contact.__x_verifiedName||e.__x_contact.__x_name||e.__x_contact.__x_pushname||e.__x_contact.formattedName,
                 __x_notifyName: e.__x_contact.__x_notifyName,
             }
         });
