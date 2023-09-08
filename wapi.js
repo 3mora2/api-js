@@ -1420,6 +1420,7 @@ function custom_clint() {
             data = metadata.participants.map((e) => {
                 return {
                     id: e.id.user,
+                    isAdmin:e.isAdmin,
                     // name:e.__x_formattedTitle,
                     isGroup: e.isGroup,
                     isMyContact: e.__x_contact.isMyContact,
