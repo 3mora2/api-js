@@ -1,3 +1,5 @@
+openChatAt
+
     window.WAPI_ = {}
     window.WAPI_.checkNumberStatus_V2 = async function(chatId, done) {
         let data
@@ -194,17 +196,17 @@
             chatId += chatId.length > 15 ? '@g.us' : '@c.us'
         }
 
-        const chat = window.WAPI.getChat(chatId)
-        if (chat) {
-            try {
-                const res = await window.Store.Cmd.openChatAt(chat)
-                data = { result: res }
-            } catch (e) {
-                data = { error: e.message }
-            }
-        } else {
-            data = { error: "Chat NOT FOUND" }
+//        const chat = window.WAPI.getChat(chatId)
+//        if (chat) {
+        try {
+            const res = await window.WPP.chat.openChatBottom(chatId)
+            data = { result: res }
+        } catch (e) {
+            data = { error: e.message }
         }
+//        } else {
+//            data = { error: "Chat NOT FOUND" }
+//        }
 
         if (done) done(data);
         return data
