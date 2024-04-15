@@ -1,4 +1,3 @@
-openChatAt
 
     window.WAPI_ = {}
     window.WAPI_.checkNumberStatus_V2 = async function(chatId, done) {
